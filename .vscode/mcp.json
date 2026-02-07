@@ -14,6 +14,20 @@
 				"--context",
 				"ide-assistant"
 			]
+		},
+		"gradle-mcp": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"run",
+				"--directory",
+				"/Users/jermey/Projects/gradle-mcp",
+				"gradle-mcp",
+			],
+			"env": {
+				"GRADLE_PROJECT_ROOT": "/Users/jermey/Projects/seal",
+				"GRADLE_WRAPPER": "/Users/jermey/Projects/seal/gradlew"
+			}
 		}
 	},
 	"inputs": []
