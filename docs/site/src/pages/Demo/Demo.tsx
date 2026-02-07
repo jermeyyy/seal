@@ -43,11 +43,11 @@ export default function Demo() {
         <h2 id="screenshots">Screenshots</h2>
         <div className={styles.screenshotsGrid}>
           <div className={styles.screenshotCard}>
-            <img src="/demo-android.png" alt="Seal demo app on Android" className={styles.screenshotImg} />
+            <img src={`${import.meta.env.BASE_URL}demo-android.png`} alt="Seal demo app on Android" className={styles.screenshotImg} />
             <p className={styles.screenshotCaption}>Android</p>
           </div>
           <div className={styles.screenshotCard}>
-            <img src="/demo-ios.png" alt="Seal demo app on iOS" className={styles.screenshotImg} />
+            <img src={`${import.meta.env.BASE_URL}demo-ios.png`} alt="Seal demo app on iOS" className={styles.screenshotImg} />
             <p className={styles.screenshotCaption}>iOS</p>
           </div>
         </div>
