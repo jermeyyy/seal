@@ -18,6 +18,8 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
+
+        withHostTest {}
     }
 
     sourceSets {
@@ -26,6 +28,15 @@ kotlin {
             implementation(libs.conscrypt.android)
             implementation(libs.okhttp)
             implementation(libs.kotlinx.coroutines.android)
+        }
+
+        val androidHostTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlin.testJunit)
+                implementation(libs.okhttp.mockwebserver)
+                implementation(libs.kotlinx.coroutines.test)
+            }
         }
     }
 }

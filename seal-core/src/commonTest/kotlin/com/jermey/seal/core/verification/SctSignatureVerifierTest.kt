@@ -208,7 +208,9 @@ class SctSignatureVerifierTest {
     @Test
     fun buildSignedData_timestampEncodedAsBigEndian() {
         val verifier = SctSignatureVerifier(FakeCryptoVerifier())
-        val timestampMillis = 0x0102030405060708L
+        // Use a realistic timestamp that round-trips safely on all platforms (iOS NSDate).
+        // 1700000000000L = 0x0000018BCFE56800
+        val timestampMillis = 1_700_000_000_000L
         val sct = makeSct(timestampMillis = timestampMillis)
         val leafCert = byteArrayOf(0x30)
 
@@ -220,13 +222,14 @@ class SctSignatureVerifierTest {
         )
 
         // Timestamp starts at offset 2 (after version + signature_type)
-        assertEquals(0x01.toByte(), result[2], "timestamp byte 7")
-        assertEquals(0x02.toByte(), result[3], "timestamp byte 6")
-        assertEquals(0x03.toByte(), result[4], "timestamp byte 5")
-        assertEquals(0x04.toByte(), result[5], "timestamp byte 4")
-        assertEquals(0x05.toByte(), result[6], "timestamp byte 3")
-        assertEquals(0x06.toByte(), result[7], "timestamp byte 2")
-        assertEquals(0x07.toByte(), result[8], "timestamp byte 1")
-        assertEquals(0x08.toByte(), result[9], "timestamp byte 0")
+        // 1700000000000 = 0x00_00_01_8B_CF_E5_68_00 in big-endian
+        assertEquals(0x00.toByte(), result[2], "timestamp byte 7")
+        assertEquals(0x00.toByte(), result[3], "timestamp byte 6")
+        assertEquals(0x01.toByte(), result[4], "timestamp byte 5")
+        assertEquals(0x8B.toByte(), result[5], "timestamp byte 4")
+        assertEquals(0xCF.toByte(), result[6], "timestamp byte 3")
+        assertEquals(0xE5.toByte(), result[7], "timestamp byte 2")
+        assertEquals(0x68.toByte(), result[8], "timestamp byte 1")
+        assertEquals(0x00.toByte(), result[9], "timestamp byte 0")
     }
 }
