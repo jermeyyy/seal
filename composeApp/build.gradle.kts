@@ -42,6 +42,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(project(":seal-core"))
+            implementation(project(":seal-ktor"))
+        }
+        androidMain.dependencies {
+            implementation(project(":seal-android"))
+        }
+        iosMain.dependencies {
+            implementation(project(":seal-ios"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
