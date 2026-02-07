@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://jermeyyy.github.io/seal/"><img src="https://img.shields.io/badge/Docs-jermeyyy.github.io%2Fseal-blue?logo=gitbook&logoColor=white" alt="Documentation" /></a>
   <a href="https://central.sonatype.com/search?q=io.github.jermey.seal"><img src="https://img.shields.io/maven-central/v/io.github.jermey.seal/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" /></a>
   <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" /></a>
   <a href="https://www.jetbrains.com/kotlin-multiplatform/"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-4285F4?logo=android&logoColor=white" alt="Platforms" /></a>
