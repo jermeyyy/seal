@@ -66,7 +66,7 @@ public class CTConfigurationBuilder {
     /**
      * Build the immutable [CTConfiguration].
      */
-    internal fun build(): CTConfiguration = CTConfiguration(
+    public fun build(): CTConfiguration = CTConfiguration(
         hostMatcher = hostMatcher,
         policy = policy,
         failOnError = failOnError,

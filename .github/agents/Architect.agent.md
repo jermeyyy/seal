@@ -203,8 +203,7 @@ duck/select_option:
 
 ### How Delegation Works
 
-- Only **one agent processes at a time** - main agent or one subagent
-- Main agent can call `runSubagent` multiple times, but **subagents execute sequentially**
+- Main agent can call `runSubagent` multiple times, subagents will run in parallel
 - **Subagents cannot spawn subagents** - only main agent has `runSubagent` tool
 - Subagents return a single message with their results
 
