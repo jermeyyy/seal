@@ -13,6 +13,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLPeerUnverifiedException
+import android.util.Log
 import javax.net.ssl.SSLSocket
 
 /**
@@ -56,9 +57,11 @@ public class CertificateTransparencyInterceptor internal constructor(
 
         // Step 2: Check host matching — skip verification if host is not included
         if (!configuration.hostMatcher.matches(host)) {
+            Log.d("SealCT", "[$host] Host not matched, skipping CT verification")
             configuration.logger?.invoke(host, VerificationResult.Success.DisabledForHost)
             return response
         }
+        Log.d("SealCT", "[$host] Host matched, proceeding with CT verification")
 
         // Step 3: Get TLS connection details
         val connection = chain.connection() ?: return response
@@ -73,6 +76,7 @@ public class CertificateTransparencyInterceptor internal constructor(
 
         // Step 5: Clean and order the certificate chain
         val cleanedChain = CertificateChainCleaner.clean(x509Certs)
+        Log.d("SealCT", "[$host] Certificate chain: ${cleanedChain.size} certs")
 
         // Step 6: Convert to DER byte arrays (leaf first)
         val derChain = cleanedChain.map { it.encoded }
@@ -85,6 +89,8 @@ public class CertificateTransparencyInterceptor internal constructor(
             null
         }
 
+        Log.d("SealCT", "[$host] TLS extension SCT bytes: ${tlsExtensionSctBytes?.size ?: 0}")
+
         // Step 8: Run verification
         // The verifier internally extracts embedded SCTs from the leaf certificate.
         // TLS extension SCTs are passed as raw bytes.
@@ -96,6 +102,20 @@ public class CertificateTransparencyInterceptor internal constructor(
                 tlsExtensionSctBytes = tlsExtensionSctBytes,
             )
         }
+
+        val trustStatus = when (result) {
+            is VerificationResult.Success.Trusted -> "TRUSTED (${result.validScts.size} valid SCTs)"
+            is VerificationResult.Success.InsecureConnection -> "SKIPPED (insecure connection)"
+            is VerificationResult.Success.DisabledForHost -> "SKIPPED (disabled for host)"
+            is VerificationResult.Success.DisabledStaleLogList -> "SKIPPED (stale log list)"
+            is VerificationResult.Failure.NoScts -> "NOT TRUSTED (no SCTs found)"
+            is VerificationResult.Failure.TooFewSctsTrusted -> "NOT TRUSTED (too few SCTs: ${result.found}/${result.required})"
+            is VerificationResult.Failure.TooFewDistinctOperators -> "NOT TRUSTED (too few operators: ${result.found}/${result.required})"
+            is VerificationResult.Failure.LogServersFailed -> "NOT TRUSTED (all ${result.sctResults.size} SCTs failed log verification)"
+            is VerificationResult.Failure.UnknownError -> "NOT TRUSTED (error: ${result.cause.message})"
+        }
+        Log.i("SealCT", "[$host] CT Verdict: $trustStatus")
+        Log.d("SealCT", "[$host] Verification detail: $result")
 
         // Step 9: Invoke logger callback
         configuration.logger?.invoke(host, result)

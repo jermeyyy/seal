@@ -3,6 +3,7 @@ package com.jermey.seal.core.verification
 import com.jermey.seal.core.crypto.CryptoVerifier
 import com.jermey.seal.core.model.LogState
 import com.jermey.seal.core.model.LogServer
+import com.jermey.seal.core.model.Origin
 import com.jermey.seal.core.model.SctVerificationResult
 import com.jermey.seal.core.model.SignedCertificateTimestamp
 import com.jermey.seal.core.x509.CertificateParser
@@ -36,8 +37,17 @@ public class SctSignatureVerifier(
         }
 
         return try {
-            val isPrecert = CertificateParser.isPrecertificate(leafCertDer)
-            val signedData = buildSignedData(sct, leafCertDer, issuerCertDer, isPrecert)
+            // For embedded SCTs, the CT log signed over the precertificate's TBS
+            // (with the SCT/poison extension removed). The final certificate won't have
+            // the poison extension, so we determine the entry type from the SCT origin.
+            val usePrecertEntry = when (sct.origin) {
+                Origin.EMBEDDED -> true  // Embedded SCTs were signed as precert_entry
+                Origin.TLS_EXTENSION -> false  // TLS SCTs use x509_entry
+                Origin.OCSP_RESPONSE -> false  // OCSP SCTs use x509_entry
+            }
+            val signedData = buildSignedData(sct, leafCertDer, issuerCertDer, usePrecertEntry)
+
+            println("SealCT: Verifying SCT from ${sct.origin}: usePrecertEntry=$usePrecertEntry, signedData=${signedData.size} bytes, pubKey=${logServer.publicKey.size} bytes")
 
             val verified = cryptoVerifier.verifySignature(
                 publicKeyBytes = logServer.publicKey,
@@ -63,7 +73,7 @@ public class SctSignatureVerifier(
         sct: SignedCertificateTimestamp,
         leafCertDer: ByteArray,
         issuerCertDer: ByteArray?,
-        isPrecert: Boolean,
+        usePrecertEntry: Boolean,
     ): ByteArray {
         val buffer = mutableListOf<Byte>()
 
@@ -79,7 +89,7 @@ public class SctSignatureVerifier(
             buffer.add(((millis shr (i * 8)) and 0xFF).toByte())
         }
 
-        if (isPrecert) {
+        if (usePrecertEntry) {
             // entry_type: 2 bytes (precert_entry = 1)
             buffer.add(0)
             buffer.add(1)

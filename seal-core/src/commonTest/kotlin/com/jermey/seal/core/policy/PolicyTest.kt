@@ -48,8 +48,13 @@ class PolicyTest {
 
     @Test
     fun chromeNoValidSctsReturnsNoScts() {
-        val result = ChromeCtPolicy().evaluate(90, listOf(invalid(0), invalid(1)))
-        assertIs<VerificationResult.Failure.NoScts>(result)
+        // When no SCTs at all, returns NoScts
+        val noSctsResult = ChromeCtPolicy().evaluate(90, emptyList())
+        assertIs<VerificationResult.Failure.NoScts>(noSctsResult)
+
+        // When SCTs exist but all are invalid, returns LogServersFailed
+        val allInvalidResult = ChromeCtPolicy().evaluate(90, listOf(invalid(0), invalid(1)))
+        assertIs<VerificationResult.Failure.LogServersFailed>(allInvalidResult)
     }
 
     @Test
@@ -176,8 +181,13 @@ class PolicyTest {
 
     @Test
     fun appleNoValidSctsReturnsNoScts() {
-        val result = AppleCtPolicy().evaluate(90, listOf(invalid(0), invalid(1)))
-        assertIs<VerificationResult.Failure.NoScts>(result)
+        // When no SCTs at all, returns NoScts
+        val noSctsResult = AppleCtPolicy().evaluate(90, emptyList())
+        assertIs<VerificationResult.Failure.NoScts>(noSctsResult)
+
+        // When SCTs exist but all are invalid, returns LogServersFailed
+        val allInvalidResult = AppleCtPolicy().evaluate(90, listOf(invalid(0), invalid(1)))
+        assertIs<VerificationResult.Failure.LogServersFailed>(allInvalidResult)
     }
 
     @Test

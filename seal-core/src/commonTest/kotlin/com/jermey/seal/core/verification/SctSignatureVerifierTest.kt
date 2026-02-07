@@ -62,7 +62,7 @@ class SctSignatureVerifierTest {
             sct = sct,
             leafCertDer = leafCert,
             issuerCertDer = null,
-            isPrecert = false,
+            usePrecertEntry = false,
         )
 
         var offset = 0
@@ -122,7 +122,7 @@ class SctSignatureVerifierTest {
             sct = sct,
             leafCertDer = leafCert,
             issuerCertDer = null,
-            isPrecert = false,
+            usePrecertEntry = false,
         )
 
         // Check extensions at the end: 2-byte length prefix + 4 bytes
@@ -147,7 +147,7 @@ class SctSignatureVerifierTest {
         val leafCert = byteArrayOf(0x30, 0x03, 0x01, 0x02, 0x03)
         val issuerCert = byteArrayOf(0x30, 0x05, 0x01, 0x02, 0x03, 0x04, 0x05)
 
-        // For precert, we call buildSignedData directly with isPrecert=true
+        // For precert, we call buildSignedData directly with usePrecertEntry=true
         // Note: TbsCertificateBuilder.reconstructTbsForVerification will be called with leafCert,
         // which may fail on invalid DER. In a real scenario we'd need valid certs.
         // Here we're testing the structure, so we catch potential exceptions.
@@ -156,7 +156,7 @@ class SctSignatureVerifierTest {
                 sct = sct,
                 leafCertDer = leafCert,
                 issuerCertDer = issuerCert,
-                isPrecert = true,
+                usePrecertEntry = true,
             )
 
             var offset = 0
@@ -218,7 +218,7 @@ class SctSignatureVerifierTest {
             sct = sct,
             leafCertDer = leafCert,
             issuerCertDer = null,
-            isPrecert = false,
+            usePrecertEntry = false,
         )
 
         // Timestamp starts at offset 2 (after version + signature_type)

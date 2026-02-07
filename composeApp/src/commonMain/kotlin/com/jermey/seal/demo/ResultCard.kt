@@ -1,12 +1,20 @@
 package com.jermey.seal.demo
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.HourglassEmpty
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jermey.seal.core.model.VerificationResult
 
@@ -15,55 +23,82 @@ import com.jermey.seal.core.model.VerificationResult
  */
 @Composable
 fun ResultCard(result: CtCheckResult, modifier: Modifier = Modifier) {
-    Card(
+    val (icon, iconTint) = statusIconInfo(result.status)
+
+    ElevatedCard(
         modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = when (result.status) {
-                is CtCheckResult.Status.Completed -> {
-                    when (result.status.result) {
-                        is VerificationResult.Success -> MaterialTheme.colorScheme.secondaryContainer
-                        is VerificationResult.Failure -> MaterialTheme.colorScheme.errorContainer
-                    }
-                }
-                is CtCheckResult.Status.Error -> MaterialTheme.colorScheme.errorContainer
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            }
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp),
     ) {
         Row(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = statusIcon(result.status),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(end = 12.dp),
-            )
+            Surface(
+                shape = MaterialTheme.shapes.small,
+                color = iconTint.copy(alpha = 0.12f),
+                modifier = Modifier.size(40.dp),
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = iconTint,
+                        modifier = Modifier.size(22.dp),
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(14.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = result.url.removePrefix("https://"),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = statusDescription(result.status),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
     }
 }
 
-private fun statusIcon(status: CtCheckResult.Status): String = when (status) {
-    is CtCheckResult.Status.Pending -> "⏳"
-    is CtCheckResult.Status.Loading -> "🔄"
+private data class IconInfo(val icon: ImageVector, val tint: Color)
+
+@Composable
+private fun statusIconInfo(status: CtCheckResult.Status): IconInfo = when (status) {
+    is CtCheckResult.Status.Pending -> IconInfo(
+        Icons.Default.HourglassEmpty,
+        MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    is CtCheckResult.Status.Loading -> IconInfo(
+        Icons.Default.Sync,
+        MaterialTheme.colorScheme.primary,
+    )
     is CtCheckResult.Status.Completed -> when (status.result) {
-        is VerificationResult.Success -> "✅"
-        is VerificationResult.Failure -> "❌"
+        is VerificationResult.Success -> IconInfo(
+            Icons.Default.CheckCircle,
+            Color(0xFF2E7D32),
+        )
+        is VerificationResult.Failure -> IconInfo(
+            Icons.Default.Cancel,
+            MaterialTheme.colorScheme.error,
+        )
     }
-    is CtCheckResult.Status.Error -> "⚠️"
+    is CtCheckResult.Status.Error -> IconInfo(
+        Icons.Default.Error,
+        MaterialTheme.colorScheme.error,
+    )
 }
 
 private fun statusDescription(status: CtCheckResult.Status): String = when (status) {

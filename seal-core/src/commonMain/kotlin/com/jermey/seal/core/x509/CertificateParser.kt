@@ -101,7 +101,14 @@ public object CertificateParser {
         val parsed = parseCertificate(derBytes)
         val sctExt = parsed.extensions.firstOrNull {
             it.oid == CertificateExtensions.SCT_EXTENSION_OID
-        } ?: return emptyList()
+        }
+
+        if (sctExt == null) {
+            println("SealCT: No SCT extension found in ${parsed.extensions.size} extensions (OIDs: ${parsed.extensions.map { it.oid }})")
+            return emptyList()
+        }
+
+        println("SealCT: Found SCT extension OID, value size: ${sctExt.value.size}")
 
         // The extension value is an OCTET STRING wrapping the SCT list.
         // Parse the inner OCTET STRING to get the actual SCT list bytes.
@@ -113,7 +120,8 @@ public object CertificateParser {
                 // Try parsing directly if there's no inner OCTET STRING wrapper
                 SctListParser.parse(sctExt.value, Origin.EMBEDDED)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            println("SealCT: extractEmbeddedScts failed: ${e.message}")
             emptyList()
         }
     }

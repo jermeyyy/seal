@@ -18,9 +18,10 @@ data class CtCheckResult(
 }
 
 val TEST_URLS = listOf(
-    "https://www.google.com",
-    "https://github.com",
-    "https://www.cloudflare.com",
-    "https://www.facebook.com",
-    "https://www.amazon.com",
+    "https://certificate.transparency.dev",
+    "https://valid-isrgrootx1.letsencrypt.org",
+    "https://www.digicert.com",
+    "https://www.sectigo.com",
+    "https://www.entrust.com",
+    "https://www.globalsign.com",
 )

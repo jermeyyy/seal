@@ -20,7 +20,12 @@ public class ChromeCtPolicy : CTPolicy {
         val validScts = sctResults.filterIsInstance<SctVerificationResult.Valid>()
 
         if (validScts.isEmpty()) {
-            return VerificationResult.Failure.NoScts
+            // Distinguish: no SCTs at all vs all SCTs failed
+            return if (sctResults.isEmpty()) {
+                VerificationResult.Failure.NoScts
+            } else {
+                VerificationResult.Failure.LogServersFailed(sctResults)
+            }
         }
 
         val requiredScts = if (certificateLifetimeDays < 180) 2 else 3

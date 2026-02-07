@@ -1,7 +1,8 @@
 package com.jermey.seal.core.loglist
 
 import com.jermey.seal.core.model.LogServer
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.Clock.System
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 

@@ -52,6 +52,7 @@ public class CertificateTransparencyVerifier(
 
             // Step 1: Collect all SCTs from all sources
             val allScts = collectScts(leafCertDer, tlsExtensionSctBytes, ocspResponseSctBytes)
+            println("SealCT: Collected ${allScts.size} SCTs for verification")
 
             if (allScts.isEmpty()) {
                 return VerificationResult.Failure.NoScts
@@ -73,20 +74,63 @@ public class CertificateTransparencyVerifier(
                     )
                 }
             }
+            println("SealCT: Log list has ${logServers.size} servers")
 
             // Build a lookup map: LogId -> LogServer
             val logServersByLogId = logServers.associateBy { it.logId }
 
             // Step 3: Verify each SCT against its log
             val sctResults = allScts.map { sct ->
-                verifySct(sct, logServersByLogId, leafCertDer, issuerCertDer)
+                verifySct(sct, logServersByLogId, leafCertDer, issuerCertDer).also {
+                    println("SealCT: SCT verification result: $it")
+                }
             }
 
             // Step 4: Calculate certificate lifetime
             val certificateLifetimeDays = calculateCertificateLifetimeDays(leafCertDer)
 
             // Step 5: Apply policy
-            policy.evaluate(certificateLifetimeDays, sctResults)
+            val result = policy.evaluate(certificateLifetimeDays, sctResults)
+
+            // Log final verification summary
+            val validCount = sctResults.count { it is SctVerificationResult.Valid }
+            val invalidCount = sctResults.size - validCount
+            println("SealCT: === Verification Summary ===")
+            println("SealCT: Total SCTs: ${sctResults.size} (valid: $validCount, invalid: $invalidCount)")
+            when (result) {
+                is VerificationResult.Success.Trusted ->
+                    println("SealCT: ✓ TRUSTED - CT policy satisfied with ${result.validScts.size} valid SCTs")
+                is VerificationResult.Success.InsecureConnection ->
+                    println("SealCT: ○ SKIPPED - Insecure connection")
+                is VerificationResult.Success.DisabledForHost ->
+                    println("SealCT: ○ SKIPPED - Disabled for host")
+                is VerificationResult.Success.DisabledStaleLogList ->
+                    println("SealCT: ○ SKIPPED - Stale log list")
+                is VerificationResult.Failure.NoScts ->
+                    println("SealCT: ✗ NOT TRUSTED - No SCTs found in certificate")
+                is VerificationResult.Failure.TooFewSctsTrusted ->
+                    println("SealCT: ✗ NOT TRUSTED - Too few valid SCTs: ${result.found}/${result.required}")
+                is VerificationResult.Failure.TooFewDistinctOperators ->
+                    println("SealCT: ✗ NOT TRUSTED - Too few distinct operators: ${result.found}/${result.required}")
+                is VerificationResult.Failure.LogServersFailed ->
+                    println("SealCT: ✗ NOT TRUSTED - All ${result.sctResults.size} SCTs failed verification")
+                is VerificationResult.Failure.UnknownError ->
+                    println("SealCT: ✗ NOT TRUSTED - Error: ${result.cause.message}")
+            }
+
+            // Log individual failure reasons
+            sctResults.filterIsInstance<SctVerificationResult.Invalid>().forEach { invalid ->
+                val reason = when (invalid) {
+                    is SctVerificationResult.Invalid.LogNotTrusted -> "Log not in trusted list"
+                    is SctVerificationResult.Invalid.LogExpired -> "Log expired"
+                    is SctVerificationResult.Invalid.LogRejected -> "Log rejected"
+                    is SctVerificationResult.Invalid.FailedVerification -> "Signature verification failed"
+                    is SctVerificationResult.Invalid.SignatureMismatch -> "Signature mismatch"
+                }
+                println("SealCT:   - SCT ${invalid.sct.logId}: $reason")
+            }
+
+            result
         } catch (e: Exception) {
             VerificationResult.Failure.UnknownError(e)
         }
@@ -104,32 +148,39 @@ public class CertificateTransparencyVerifier(
 
         // 1. Extract embedded SCTs from the leaf certificate
         try {
+            println("SealCT: Extracting embedded SCTs from leaf certificate (${leafCertDer.size} bytes)")
             val embeddedScts = CertificateParser.extractEmbeddedScts(leafCertDer)
+            println("SealCT: Found ${embeddedScts.size} embedded SCTs")
             allScts.addAll(embeddedScts)
-        } catch (_: Exception) {
-            // Skip if extraction fails
+        } catch (e: Exception) {
+            println("SealCT: Failed to extract embedded SCTs: ${e.message}")
         }
 
         // 2. Parse TLS extension SCTs
         if (tlsExtensionSctBytes != null && tlsExtensionSctBytes.isNotEmpty()) {
             try {
+                println("SealCT: Parsing TLS extension SCTs (${tlsExtensionSctBytes.size} bytes)")
                 val tlsScts = SctListParser.parse(tlsExtensionSctBytes, Origin.TLS_EXTENSION)
+                println("SealCT: Found ${tlsScts.size} TLS extension SCTs")
                 allScts.addAll(tlsScts)
-            } catch (_: Exception) {
-                // Skip if parsing fails
+            } catch (e: Exception) {
+                println("SealCT: Failed to parse TLS extension SCTs: ${e.message}")
             }
         }
 
         // 3. Parse OCSP response SCTs
         if (ocspResponseSctBytes != null && ocspResponseSctBytes.isNotEmpty()) {
             try {
+                println("SealCT: Parsing OCSP SCTs (${ocspResponseSctBytes.size} bytes)")
                 val ocspScts = SctListParser.parse(ocspResponseSctBytes, Origin.OCSP_RESPONSE)
+                println("SealCT: Found ${ocspScts.size} OCSP SCTs")
                 allScts.addAll(ocspScts)
-            } catch (_: Exception) {
-                // Skip if parsing fails
+            } catch (e: Exception) {
+                println("SealCT: Failed to parse OCSP SCTs: ${e.message}")
             }
         }
 
+        println("SealCT: Total SCTs collected: ${allScts.size}")
         return allScts
     }
 
@@ -145,6 +196,7 @@ public class CertificateTransparencyVerifier(
         val logServer = logServersByLogId[sct.logId]
             ?: return SctVerificationResult.Invalid.LogNotTrusted(sct)
 
+        println("SealCT: Matched SCT to log: '${logServer.url}' (operator: ${logServer.operator}, state: ${logServer.state})")
         return sctSignatureVerifier.verify(sct, logServer, leafCertDer, issuerCertDer)
     }
 

@@ -31,6 +31,7 @@ internal object LogListMapper {
                 mapTiledLogDto(tiledLog, operatorDto.name)?.let { servers.add(it) }
             }
 
+            println("SealCT: Operator '${operatorDto.name}' -> ${servers.size} log servers")
             LogOperator(name = operatorDto.name, logs = servers)
         }
     }
@@ -39,7 +40,9 @@ internal object LogListMapper {
      * Convenience: map to a flat list of all [LogServer]s.
      */
     internal fun mapToLogServers(dto: LogListDto): List<LogServer> {
-        return mapToOperators(dto).flatMap { it.logs }
+        val servers = mapToOperators(dto).flatMap { it.logs }
+        println("SealCT: LogListMapper mapped ${dto.operators.size} operators -> ${servers.size} log servers")
+        return servers
     }
 
     @OptIn(ExperimentalEncodingApi::class)
@@ -55,8 +58,9 @@ internal object LogListMapper {
                 state = mapState(log.state),
                 temporalInterval = mapTemporalInterval(log.temporalInterval),
             )
-        } catch (_: Exception) {
-            null // Skip malformed entries
+        } catch (e: Exception) {
+            println("SealCT: Failed to map log '${log.description}': ${e.message}")
+            null
         }
     }
 
@@ -73,8 +77,9 @@ internal object LogListMapper {
                 state = mapState(log.state),
                 temporalInterval = mapTemporalInterval(log.temporalInterval),
             )
-        } catch (_: Exception) {
-            null // Skip malformed entries
+        } catch (e: Exception) {
+            println("SealCT: Failed to map tiled log '${log.description}': ${e.message}")
+            null
         }
     }
 

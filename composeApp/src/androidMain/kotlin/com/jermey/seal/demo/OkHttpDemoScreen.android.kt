@@ -3,11 +3,13 @@ package com.jermey.seal.demo
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jermey.seal.android.okhttp.certificateTransparencyInterceptor
+import com.jermey.seal.android.okhttp.installCertificateTransparency
 import com.jermey.seal.core.model.VerificationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +32,7 @@ fun OkHttpDemoScreen() {
     val verificationResults = remember { mutableMapOf<String, VerificationResult>() }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        // Run button
         Button(
             onClick = {
                 isRunning = true
@@ -38,18 +41,18 @@ fun OkHttpDemoScreen() {
 
                 scope.launch {
                     val client = OkHttpClient.Builder()
-                        .addNetworkInterceptor(
-                            certificateTransparencyInterceptor {
-                                failOnError = false
-                                logger = { host, result ->
-                                    verificationResults[host] = result
-                                }
+                        .installCertificateTransparency {
+                            failOnError = false
+                            logger = { host, result ->
+                                android.util.Log.d("SealCT", "OkHttp CT [$host]: $result")
+                                verificationResults[host] = result
                             }
-                        )
+                        }
                         .build()
 
                     results = results.map { checkResult ->
                         try {
+                            android.util.Log.d("SealCT", "OkHttp: Starting CT check for ${checkResult.url}")
                             withContext(Dispatchers.IO) {
                                 val request = Request.Builder()
                                     .url(checkResult.url)
@@ -71,6 +74,7 @@ fun OkHttpDemoScreen() {
                                 )
                             }
                         } catch (e: Exception) {
+                            android.util.Log.e("SealCT", "OkHttp: Error checking ${checkResult.url}", e)
                             checkResult.copy(
                                 status = CtCheckResult.Status.Error(
                                     e.message ?: "Unknown error"
@@ -82,7 +86,8 @@ fun OkHttpDemoScreen() {
                 }
             },
             enabled = !isRunning,
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            shape = MaterialTheme.shapes.medium,
         ) {
             if (isRunning) {
                 CircularProgressIndicator(
@@ -90,15 +95,28 @@ fun OkHttpDemoScreen() {
                     strokeWidth = 2.dp,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+            } else {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                )
             }
-            Text(if (isRunning) "Running…" else "Run OkHttp CT Test")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(if (isRunning) "Running…" else "Run CT Test")
         }
 
         if (isRunning) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
 
+        // Summary stats
+        val hasResults = results.any { it.status is CtCheckResult.Status.Completed || it.status is CtCheckResult.Status.Error }
+        if (hasResults) {
+            SummaryStatsBar(results)
+        }
+
+        // Results list
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = 8.dp),

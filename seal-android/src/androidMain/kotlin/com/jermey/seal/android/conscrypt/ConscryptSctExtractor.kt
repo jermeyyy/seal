@@ -1,5 +1,6 @@
 package com.jermey.seal.android.conscrypt
 
+import android.util.Log
 import com.jermey.seal.core.model.Origin
 import com.jermey.seal.core.model.SignedCertificateTimestamp
 import com.jermey.seal.core.parser.SctListParser
@@ -69,12 +70,21 @@ internal class ConscryptSctExtractor {
      * @return Raw SCT list bytes from the TLS extension, or null if unavailable.
      */
     fun getRawTlsSctData(socket: SSLSocket): ByteArray? {
-        if (!Conscrypt.isConscrypt(socket)) return null
+        if (!Conscrypt.isConscrypt(socket)) {
+            Log.d("SealCT", "Socket is not Conscrypt: ${socket.javaClass.name}")
+            return null
+        }
         return try {
-            val session = socket.session ?: return null
+            val session = socket.session ?: run {
+                Log.d("SealCT", "No SSL session available")
+                return null
+            }
+            Log.d("SealCT", "SSL session class: ${session.javaClass.name}")
             val rawBytes = getSctData(session)
+            Log.d("SealCT", "Raw SCT data from Conscrypt: ${rawBytes?.size ?: 0} bytes")
             if (rawBytes != null && rawBytes.isNotEmpty()) rawBytes else null
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("SealCT", "Error getting raw TLS SCT data", e)
             null
         }
     }
@@ -86,8 +96,11 @@ internal class ConscryptSctExtractor {
     private fun getSctData(session: SSLSession): ByteArray? {
         return try {
             val method = session.javaClass.getMethod("getPeerSignedCertificateTimestamp")
-            method.invoke(session) as? ByteArray
-        } catch (_: Exception) {
+            val result = method.invoke(session) as? ByteArray
+            Log.d("SealCT", "getPeerSignedCertificateTimestamp returned: ${result?.size ?: "null"} bytes")
+            result
+        } catch (e: Exception) {
+            Log.e("SealCT", "Reflection call to getPeerSignedCertificateTimestamp failed", e)
             null
         }
     }
