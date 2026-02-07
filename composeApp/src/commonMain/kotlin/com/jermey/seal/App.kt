@@ -1,49 +1,58 @@
 package com.jermey.seal
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import com.jermey.seal.demo.DemoTab
+import com.jermey.seal.demo.KtorDemoScreen
+import com.jermey.seal.demo.isAndroid
 
-import seal.composeapp.generated.resources.Res
-import seal.composeapp.generated.resources.compose_multiplatform
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+        val availableTabs = remember {
+            if (isAndroid) DemoTab.entries else listOf(DemoTab.Ktor)
+        }
+        var selectedTab by remember { mutableStateOf(availableTabs.first()) }
+
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text("Seal CT Demo") },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    ),
+                )
             }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        ) { padding ->
+            Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+                if (availableTabs.size > 1) {
+                    PrimaryTabRow(selectedTabIndex = availableTabs.indexOf(selectedTab)) {
+                        availableTabs.forEach { tab ->
+                            Tab(
+                                selected = selectedTab == tab,
+                                onClick = { selectedTab = tab },
+                                text = { Text(tab.title) },
+                            )
+                        }
+                    }
+                }
+
+                when (selectedTab) {
+                    DemoTab.Ktor -> KtorDemoScreen()
+                    DemoTab.OkHttp -> OkHttpDemoContent()
                 }
             }
         }
     }
 }
+
+/**
+ * Platform-resolved composable for the OkHttp demo tab.
+ * On Android this renders the OkHttp demo screen; it should never be
+ * called on iOS because the tab is hidden.
+ */
+@Composable
+expect fun OkHttpDemoContent()

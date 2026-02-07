@@ -56,19 +56,33 @@ public class Asn1Tag(
     }
 
     public companion object {
-        // Well-known universal tags
+        // ── Well-known UNIVERSAL tags ────────────────────────────────
+
+        /** BOOLEAN (tag 0x01). */
         public val BOOLEAN: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x01)
+        /** INTEGER (tag 0x02). */
         public val INTEGER: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x02)
+        /** BIT STRING (tag 0x03). */
         public val BIT_STRING: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x03)
+        /** OCTET STRING (tag 0x04). */
         public val OCTET_STRING: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x04)
+        /** NULL (tag 0x05). */
         public val NULL: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x05)
+        /** OBJECT IDENTIFIER (tag 0x06). */
         public val OID: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x06)
+        /** UTF8String (tag 0x0C). */
         public val UTF8_STRING: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x0C)
+        /** PrintableString (tag 0x13). */
         public val PRINTABLE_STRING: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x13)
+        /** IA5String (tag 0x16). */
         public val IA5_STRING: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x16)
+        /** UTCTime (tag 0x17). */
         public val UTC_TIME: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x17)
+        /** GeneralizedTime (tag 0x18). */
         public val GENERALIZED_TIME: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, false, 0x18)
+        /** SEQUENCE (tag 0x30, constructed). */
         public val SEQUENCE: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, true, 0x10)
+        /** SET (tag 0x31, constructed). */
         public val SET: Asn1Tag = Asn1Tag(TagClass.UNIVERSAL, true, 0x11)
 
         /** Create a context-specific tag ([0], [1], etc.). */

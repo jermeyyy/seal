@@ -21,3 +21,5 @@ node_modules/
 /seal-android/build
 /seal-ios/build
 /seal-ktor/build
+docs/site/dist/
+docs/site/node_modules/

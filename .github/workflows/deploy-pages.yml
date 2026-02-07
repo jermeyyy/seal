@@ -1,0 +1,66 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: docs/site/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: gradle/gradle-build-action@v3
+
+      - name: Install npm dependencies
+        working-directory: docs/site
+        run: npm ci
+
+      - name: Build React documentation site
+        working-directory: docs/site
+        run: npm run build
+
+      - name: Generate Dokka multi-module documentation
+        run: ./gradlew dokkaGeneratePublicationHtml --no-daemon
+
+      - name: Prepare GitHub Pages content
+        run: |
+          mkdir -p _site
+          cp -r docs/site/dist/* _site/
+          cp -r build/dokka/html _site/api
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -19,6 +19,10 @@ public interface LogListCache {
 
 /**
  * A cached log list with metadata about when it was fetched.
+ *
+ * @property jsonBytes The raw JSON bytes of the cached log list.
+ * @property signatureBytes The optional signature bytes, or `null` if unavailable.
+ * @property fetchedAt The instant at which this log list was fetched from its source.
  */
 public data class CachedLogList(
     public val jsonBytes: ByteArray,

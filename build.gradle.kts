@@ -6,4 +6,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.dokka)
+}
+
+dependencies {
+    dokka(project(":seal-core"))
+    dokka(project(":seal-android"))
+    dokka(project(":seal-ios"))
+    dokka(project(":seal-ktor"))
 }
