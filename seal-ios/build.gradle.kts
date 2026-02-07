@@ -12,6 +12,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(project(":seal-core"))
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
 }
