@@ -48,26 +48,20 @@ Seal closes this gap at the application layer for both Android and iOS.
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────┐
-│              :composeApp                 │
-│          (Demo / Test App)               │
-└──────┬──────────┬──────────┬─────────────┘
-       │          │          │
-       ▼          ▼          ▼
-┌────────────┐ ┌────────┐ ┌────────────┐
-│:seal-android│ │:seal-  │ │ :seal-ios  │
-│ OkHttp     │ │ ktor   │ │ SecTrust   │
-│ Conscrypt  │ │ Plugin │ │ URLSession │
-└─────┬──────┘ └───┬────┘ └─────┬──────┘
-      └────────────┼────────────┘
-                   ▼
-           ┌──────────────┐
-           │  :seal-core  │
-           │ Models, ASN.1│
-           │ SCT Parser   │
-           │ Policy Engine│
-           └──────────────┘
+```mermaid
+graph TD
+    composeApp[":composeApp<br>(Demo / Test App)"]
+    android[":seal-android<br>OkHttp · Conscrypt"]
+    ktor[":seal-ktor<br>Plugin"]
+    ios[":seal-ios<br>SecTrust · URLSession"]
+    core[":seal-core<br>Models · ASN.1<br>SCT Parser · Policy Engine"]
+
+    composeApp --> android
+    composeApp --> ktor
+    composeApp --> ios
+    android --> core
+    ktor --> core
+    ios --> core
 ```
 
 | Module | Type | Targets | Purpose |
