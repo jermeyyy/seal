@@ -24,7 +24,7 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
           </button>
           
           <Link to="/" className={styles.brand}>
-            <img src="/logo.png" alt="Seal" className={styles.logo} />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Seal" className={styles.logo} />
             <div className={styles.brandText}>
               <span className={styles.title}>Seal</span>
               <span className={styles.subtitle}>Certificate Transparency for KMP</span>

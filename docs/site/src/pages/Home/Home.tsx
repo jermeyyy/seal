@@ -12,7 +12,7 @@ export default function Home() {
     <article className={styles.home}>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <img src="/logo.png" alt="Seal" className={styles.heroLogo} />
+        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Seal" className={styles.heroLogo} />
         <h1>Seal</h1>
         <p className={styles.subtitle}>
           Certificate Transparency for Kotlin Multiplatform
