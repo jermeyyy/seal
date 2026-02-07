@@ -7,13 +7,16 @@
 ./gradlew assemble
 
 # Build only Android debug (demo app)
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Build specific library module
 ./gradlew :seal-core:assemble
 ./gradlew :seal-android:assembleDebug
 ./gradlew :seal-ios:compileKotlinIosArm64
 ./gradlew :seal-ktor:assemble
+
+# Build iOS framework
+./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
 ```
 
 ## Testing Commands
