@@ -13,6 +13,7 @@ import Ktor from '@pages/Guides/Ktor/Ktor'
 import CustomPolicies from '@pages/Guides/CustomPolicies/CustomPolicies'
 import IOS from '@pages/Guides/iOS/iOS'
 import Configuration from '@pages/Guides/Configuration/Configuration'
+import WhyCT from '@pages/WhyCT/WhyCT'
 
 function App() {
   const basename = import.meta.env.PROD ? '/seal' : '/'
@@ -33,6 +34,7 @@ function App() {
               <Route path="/guides/ios" element={<IOS />} />
               <Route path="/guides/configuration" element={<Configuration />} />
 
+              <Route path="/why-ct" element={<WhyCT />} />
               <Route path="/demo" element={<Demo />} />
               <Route path="*" element={<Home />} />
             </Routes>

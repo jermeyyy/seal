@@ -1,0 +1,290 @@
+.whyCT {
+  width: 100%;
+  line-height: 1.7;
+}
+
+.whyCT h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.intro {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 3rem;
+  max-width: 70ch;
+}
+
+.whyCT h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.whyCT h2:first-of-type {
+  border-top: none;
+  margin-top: 0;
+}
+
+.whyCT h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.whyCT h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.whyCT section {
+  margin-bottom: 3rem;
+}
+
+.whyCT p {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  max-width: 75ch;
+}
+
+.whyCT ul {
+  list-style: disc;
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-secondary);
+}
+
+.whyCT li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.whyCT li a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.whyCT li a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+.whyCT code {
+  background: var(--color-code-bg);
+  color: var(--color-primary);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.whyCT strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.whyCT a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.whyCT a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Diagram wrapper */
+.diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.diagramCaption {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Highlight box for key takeaways */
+.highlight {
+  background: var(--color-info-bg);
+  border-left: 4px solid var(--color-primary);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+.highlight p {
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  max-width: none;
+}
+
+.highlight p:last-child {
+  margin-bottom: 0;
+}
+
+/* Problem list items */
+.problemList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.problemList li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.problemList li::before {
+  content: "\00d7";
+  position: absolute;
+  left: 0;
+  color: #e53e3e;
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+/* Benefit list items */
+.benefitList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.benefitList li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.benefitList li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: #38a169;
+  font-weight: 700;
+}
+
+/* Table styling */
+.whyCT table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 0.9375rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.whyCT thead {
+  background: var(--color-surface-raised);
+}
+
+.whyCT th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.whyCT td {
+  padding: 0.75rem 1rem;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.whyCT tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.whyCT tbody tr:hover {
+  background: var(--color-surface-raised);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .whyCT {
+    padding: 1.5rem 1rem;
+  }
+
+  .whyCT h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .intro {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .whyCT h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .whyCT h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .whyCT ul {
+    padding-left: 1.5rem;
+  }
+
+  .highlight {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .diagram {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .whyCT h1 {
+    font-size: 1.75rem;
+  }
+
+  .whyCT h2 {
+    font-size: 1.35rem;
+  }
+
+  .whyCT h3 {
+    font-size: 1.15rem;
+  }
+}

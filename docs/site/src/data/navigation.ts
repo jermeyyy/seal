@@ -9,6 +9,7 @@ export interface NavItem {
 
 export const navigationData: NavItem[] = [
   { label: 'Home', path: '/' },
+  { label: 'Why CT?', path: '/why-ct' },
   { label: 'Getting Started', path: '/getting-started' },
   {
     label: 'Guides',

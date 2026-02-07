@@ -43,6 +43,11 @@ export default function Home() {
       {/* Why Seal */}
       <section>
         <h2 id="why-seal">Why Seal?</h2>
+        <p>
+          Certificate Transparency is a modern approach to securing the web's certificate
+          ecosystem. <Link to="/why-ct">Learn why it matters</Link> and how it compares to
+          alternatives like SSL pinning.
+        </p>
         <div className={styles.features}>
           <div className={styles.featureCard}>
             <h4>CT Enforcement</h4>
@@ -132,6 +137,7 @@ export default function Home() {
       <section>
         <h2 id="resources">Resources</h2>
         <ul>
+          <li><Link to="/why-ct">Why Certificate Transparency?</Link> — Understanding CT and its advantages</li>
           <li><Link to="/getting-started">Getting Started Guide</Link> — Installation and basic setup</li>
           <li><Link to="/guides/okhttp">OkHttp Integration</Link> — Full OkHttp interceptor guide</li>
           <li><Link to="/guides/ktor">Ktor Integration</Link> — Multiplatform Ktor plugin guide</li>
