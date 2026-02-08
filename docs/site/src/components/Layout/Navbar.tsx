@@ -32,7 +32,7 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
           </Link>
 
           <a
-            href="https://central.sonatype.com/search?q=io.github.jermeyyy&name=seal"
+            href="https://central.sonatype.com/search?q=io.github.jermeyyy.seal"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.versionBadge}

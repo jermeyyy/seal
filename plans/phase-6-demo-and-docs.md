@@ -298,15 +298,15 @@ export const navigationData: NavItem[] = [
 export const LIBRARY_VERSION = '0.1.0';  // update on release
 
 export const MAVEN_ARTIFACTS = {
-  core: 'io.github.jermeyyy:seal-core',
-  android: 'io.github.jermeyyy:seal-android',
-  ios: 'io.github.jermeyyy:seal-ios',
-  ktor: 'io.github.jermeyyy:seal-ktor',
+  core: 'io.github.jermeyyy.seal:seal-core',
+  android: 'io.github.jermeyyy.seal:seal-android',
+  ios: 'io.github.jermeyyy.seal:seal-ios',
+  ktor: 'io.github.jermeyyy.seal:seal-ktor',
 } as const;
 
 export const REPOSITORY_URLS = {
   github: 'https://github.com/jermeyyy/seal',
-  mavenCentral: 'https://central.sonatype.com/artifact/io.github.jermeyyy/seal-core',
+  mavenCentral: 'https://central.sonatype.com/artifact/io.github.jermeyyy.seal/seal-core',
   apiDocs: '/seal/api/index.html',
 } as const;
 ```

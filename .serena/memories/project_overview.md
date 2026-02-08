@@ -41,4 +41,4 @@ An implementation plan exists at `plans/seal-implementation-plan.md` describing 
 - Branch: main
 - License: Apache 2.0
 - Base package: `com.jermey.seal`
-- Publishing group: `io.github.jermey.seal`
+- Publishing group: `io.github.jermeyyy.seal`

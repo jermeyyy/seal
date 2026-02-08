@@ -196,7 +196,7 @@ android {
     }
 }
 
-group = "io.github.jermey.seal"
+group = "io.github.jermeyyy.seal"
 version = "0.1.0"
 
 publishing {
@@ -249,7 +249,7 @@ android {
     }
 }
 
-group = "io.github.jermey.seal"
+group = "io.github.jermeyyy.seal"
 version = "0.1.0"
 ```
 
@@ -285,7 +285,7 @@ kotlin {
     }
 }
 
-group = "io.github.jermey.seal"
+group = "io.github.jermeyyy.seal"
 version = "0.1.0"
 ```
 
@@ -338,7 +338,7 @@ android {
     defaultConfig { minSdk = libs.versions.android.minSdk.get().toInt() }
 }
 
-group = "io.github.jermey.seal"
+group = "io.github.jermeyyy.seal"
 version = "0.1.0"
 ```
 
@@ -377,7 +377,7 @@ iosMain.dependencies {
 
 ### Task 0.9: Configure Shared Publishing Convention Plugin
 
-**Description**: Create a convention plugin (or `buildSrc`/included build) to share POM metadata, signing configuration, and Maven Central publishing setup across all library modules. Configure group ID `io.github.jermey.seal`.
+**Description**: Create a convention plugin (or `buildSrc`/included build) to share POM metadata, signing configuration, and Maven Central publishing setup across all library modules. Configure group ID `io.github.jermeyyy.seal`.
 
 **Files to create**:
 - `build-logic/convention/build.gradle.kts`
@@ -387,7 +387,7 @@ iosMain.dependencies {
 Or alternatively, configure directly in root `build.gradle.kts` via `subprojects`/`allprojects`.
 
 **Key bits**:
-- Group ID: `io.github.jermey.seal`
+- Group ID: `io.github.jermeyyy.seal`
 - Artifact IDs: `seal-core`, `seal-android`, `seal-ios`, `seal-ktor`
 - POM: name, description, URL, licenses (Apache 2.0), developers, SCM
 - Signing: GPG key configuration via environment variables

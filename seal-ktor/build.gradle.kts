@@ -39,7 +39,7 @@ kotlin {
     }
 }
 
-group = "io.github.jermey.seal"
+group = "io.github.jermeyyy.seal"
 version = "0.1.0"
 
 dokka {
