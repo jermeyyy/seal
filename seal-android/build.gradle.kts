@@ -41,9 +41,6 @@ kotlin {
     }
 }
 
-group = "io.github.jermeyyy.seal"
-version = "0.1.0"
-
 dokka {
     moduleName.set("Seal - Android")
     moduleVersion.set("0.1.0")

@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://jermeyyy.github.io/seal/"><img src="https://img.shields.io/badge/Docs-jermeyyy.github.io%2Fseal-blue?logo=gitbook&logoColor=white" alt="Documentation" /></a>
-  <a href="https://central.sonatype.com/search?q=io.github.jermeyyy.seal"><img src="https://img.shields.io/maven-central/v/io.github.jermeyyy.seal/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" /></a>
+  <a href="https://central.sonatype.com/search?q=io.github.jermeyyy"><img src="https://img.shields.io/maven-central/v/io.github.jermeyyy/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" /></a>
   <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" /></a>
   <a href="https://www.jetbrains.com/kotlin-multiplatform/"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-4285F4?logo=android&logoColor=white" alt="Platforms" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a>
@@ -92,10 +92,10 @@ Add the Seal BOM/versions to your `libs.versions.toml`:
 seal = "<version>"
 
 [libraries]
-seal-core     = { module = "io.github.jermeyyy.seal:seal-core", version.ref = "seal" }
-seal-android  = { module = "io.github.jermeyyy.seal:seal-android", version.ref = "seal" }
-seal-ios      = { module = "io.github.jermeyyy.seal:seal-ios", version.ref = "seal" }
-seal-ktor     = { module = "io.github.jermeyyy.seal:seal-ktor", version.ref = "seal" }
+seal-core     = { module = "io.github.jermeyyy:seal-core", version.ref = "seal" }
+seal-android  = { module = "io.github.jermeyyy:seal-android", version.ref = "seal" }
+seal-ios      = { module = "io.github.jermeyyy:seal-ios", version.ref = "seal" }
+seal-ktor     = { module = "io.github.jermeyyy:seal-ktor", version.ref = "seal" }
 ```
 
 ### Gradle Dependencies
@@ -127,10 +127,10 @@ commonMain.dependencies {
 Or with raw coordinates:
 
 ```kotlin
-implementation("io.github.jermeyyy.seal:seal-core:<version>")
-implementation("io.github.jermeyyy.seal:seal-android:<version>")   // Android only
-implementation("io.github.jermeyyy.seal:seal-ios:<version>")       // iOS only
-implementation("io.github.jermeyyy.seal:seal-ktor:<version>")      // Multiplatform
+implementation("io.github.jermeyyy:seal-core:<version>")
+implementation("io.github.jermeyyy:seal-android:<version>")   // Android only
+implementation("io.github.jermeyyy:seal-ios:<version>")       // iOS only
+implementation("io.github.jermeyyy:seal-ktor:<version>")      // Multiplatform
 ```
 
 ## Quick Start — OkHttp

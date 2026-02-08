@@ -29,12 +29,12 @@ export default function WhyCT() {
         </p>
 
         <div className={styles.diagram}>
-          <svg viewBox="0 0 720 160" width="720" height="160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Web PKI certificate chain diagram">
+          <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Web PKI certificate chain diagram">
             {/* Domain Owner */}
             <rect x="10" y="50" width="140" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="80" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Domain</text>
-            <text x="80" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="12">Owner</text>
+            <text x="80" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Domain</text>
+            <text x="80" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Owner</text>
 
             {/* Arrow 1 */}
             <line x1="150" y1="80" x2="200" y2="80" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead)" />
@@ -43,8 +43,8 @@ export default function WhyCT() {
             {/* CA */}
             <rect x="200" y="50" width="140" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="270" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Certificate</text>
-            <text x="270" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="12">Authority (CA)</text>
+            <text x="270" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Certificate</text>
+            <text x="270" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Authority (CA)</text>
 
             {/* Arrow 2 */}
             <line x1="340" y1="80" x2="390" y2="80" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead)" />
@@ -53,8 +53,8 @@ export default function WhyCT() {
             {/* Certificate */}
             <rect x="390" y="50" width="140" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="460" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Certificate</text>
-            <text x="460" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="12">(X.509)</text>
+            <text x="460" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Certificate</text>
+            <text x="460" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(X.509)</text>
 
             {/* Arrow 3 */}
             <line x1="530" y1="80" x2="580" y2="80" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead)" />
@@ -63,8 +63,8 @@ export default function WhyCT() {
             {/* Browser */}
             <rect x="580" y="50" width="130" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="645" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Browser /</text>
-            <text x="645" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="12">Client</text>
+            <text x="645" y="77" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Browser /</text>
+            <text x="645" y="95" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Client</text>
 
             {/* Trust Store */}
             <rect x="580" y="5" width="130" height="35" rx="8" ry="8"
@@ -137,26 +137,26 @@ export default function WhyCT() {
         </p>
 
         <div className={styles.diagram}>
-          <svg viewBox="0 0 660 200" width="660" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SSL pinning flow diagram">
+          <svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SSL pinning flow diagram">
             {/* App */}
             <rect x="10" y="70" width="120" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="70" y="97" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Mobile App</text>
+            <text x="70" y="97" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Mobile App</text>
             <text x="70" y="115" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(hardcoded pins)</text>
 
             {/* Arrow to Server */}
             <line x1="130" y1="100" x2="210" y2="100" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-pin)" />
-            <text x="170" y="90" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">TLS Handshake</text>
+            <text x="170" y="88" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">TLS Handshake</text>
 
             {/* Server */}
             <rect x="210" y="70" width="120" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="270" y="97" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Server</text>
+            <text x="270" y="97" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Server</text>
             <text x="270" y="115" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(presents cert)</text>
 
             {/* Arrow to Decision */}
             <line x1="330" y1="100" x2="410" y2="100" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-pin)" />
-            <text x="370" y="90" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Compare</text>
+            <text x="370" y="88" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Compare</text>
 
             {/* Decision diamond */}
             <polygon points="470,60 530,100 470,140 410,100"
@@ -166,7 +166,7 @@ export default function WhyCT() {
 
             {/* Yes path */}
             <line x1="530" y1="100" x2="590" y2="100" stroke="#38a169" strokeWidth="2" markerEnd="url(#arrowhead-green)" />
-            <text x="560" y="90" textAnchor="middle" fill="#38a169" fontSize="10" fontWeight="600">Yes</text>
+            <text x="560" y="88" textAnchor="middle" fill="#38a169" fontSize="10" fontWeight="600">Yes</text>
             <rect x="590" y="78" width="60" height="44" rx="8" ry="8"
               fill="var(--color-surface-raised)" stroke="#38a169" strokeWidth="2" />
             <text x="620" y="105" textAnchor="middle" fill="#38a169" fontSize="12" fontWeight="600">Allow</text>
@@ -253,21 +253,21 @@ export default function WhyCT() {
         </p>
 
         <div className={styles.diagram}>
-          <svg viewBox="0 0 700 260" width="700" height="260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OCSP flow diagram">
+          <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OCSP flow diagram">
             {/* Client */}
             <rect x="10" y="100" width="120" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="70" y="127" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Client</text>
+            <text x="70" y="127" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Client</text>
             <text x="70" y="145" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(Browser / App)</text>
 
             {/* Arrow to Server */}
             <line x1="130" y1="115" x2="220" y2="115" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ocsp)" />
-            <text x="175" y="107" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">1. TLS Handshake</text>
+            <text x="175" y="103" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">1. TLS Handshake</text>
 
             {/* Server */}
             <rect x="220" y="100" width="120" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="280" y="127" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Server</text>
+            <text x="280" y="127" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Server</text>
             <text x="280" y="145" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(presents cert)</text>
 
             {/* Arrow from Client to OCSP (below) */}
@@ -277,19 +277,19 @@ export default function WhyCT() {
             {/* OCSP Responder */}
             <rect x="460" y="185" width="140" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="530" y="212" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">OCSP</text>
+            <text x="530" y="212" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">OCSP</text>
             <text x="530" y="230" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Responder</text>
 
             {/* Arrow from OCSP to CA */}
             <line x1="530" y1="185" x2="530" y2="75" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ocsp)" />
-            <text x="555" y="135" fill="var(--color-text-secondary)" fontSize="10">3. Check</text>
-            <text x="555" y="147" fill="var(--color-text-secondary)" fontSize="10">revocation</text>
+            <text x="570" y="135" fill="var(--color-text-secondary)" fontSize="10">3. Check</text>
+            <text x="570" y="149" fill="var(--color-text-secondary)" fontSize="10">revocation</text>
 
             {/* CA */}
             <rect x="460" y="15" width="140" height="55" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="530" y="40" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Certificate</text>
-            <text x="530" y="57" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="12">Authority</text>
+            <text x="530" y="40" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Certificate</text>
+            <text x="530" y="57" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Authority</text>
 
             {/* Arrow from OCSP back to Client */}
             <path d="M 460 235 L 100 235 L 100 160" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ocsp)" strokeDasharray="6 3" />
@@ -349,96 +349,87 @@ export default function WhyCT() {
         </p>
 
         <div className={styles.diagram}>
-          <svg viewBox="0 0 760 380" width="760" height="380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Certificate Transparency ecosystem diagram">
-            {/* Step numbers styling */}
-            {/* Domain Owner */}
-            <rect x="10" y="30" width="130" height="55" rx="10" ry="10"
+          <svg viewBox="0 0 750 510" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Certificate Transparency ecosystem diagram">
+            {/* Row 1: Domain Owner → CA → Certificate */}
+            <rect x="10" y="20" width="130" height="55" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="75" y="55" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Domain</text>
-            <text x="75" y="72" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Owner</text>
+            <text x="75" y="43" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Domain</text>
+            <text x="75" y="58" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Owner</text>
 
-            {/* Arrow 1: Domain to CA */}
-            <line x1="140" y1="57" x2="195" y2="57" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
-            <circle cx="168" cy="47" r="9" fill="var(--color-primary)" />
-            <text x="168" y="51" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">1</text>
+            {/* Arrow 1: Domain → CA */}
+            <line x1="140" y1="47" x2="200" y2="47" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
+            <circle cx="170" cy="37" r="9" fill="var(--color-primary)" />
+            <text x="170" y="41" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">1</text>
 
             {/* CA */}
-            <rect x="195" y="30" width="130" height="55" rx="10" ry="10"
+            <rect x="200" y="20" width="130" height="55" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="260" y="55" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Certificate</text>
-            <text x="260" y="72" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Authority</text>
+            <text x="265" y="43" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Certificate</text>
+            <text x="265" y="58" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">Authority</text>
 
-            {/* Arrow 2: CA to CT Logs */}
-            <path d="M 260 85 L 260 125 L 460 125" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
-            <circle cx="350" cy="115" r="9" fill="var(--color-primary)" />
-            <text x="350" y="119" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">2</text>
-            <text x="370" y="138" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Submit precertificate</text>
+            {/* Arrow 4: CA → Certificate (with SCTs) */}
+            <line x1="330" y1="47" x2="410" y2="47" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
+            <circle cx="370" cy="37" r="9" fill="var(--color-primary)" />
+            <text x="370" y="41" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">4</text>
+
+            {/* Certificate (with embedded SCTs) */}
+            <rect x="410" y="20" width="140" height="55" rx="10" ry="10"
+              fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
+            <text x="480" y="40" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Certificate</text>
+            <text x="480" y="54" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(with embedded</text>
+            <text x="480" y="66" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">SCTs)</text>
+
+            {/* Arrow 2: CA → CT Logs (submit precertificate) */}
+            <path d="M 265 75 L 265 165 L 450 165" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
+            <circle cx="350" cy="165" r="9" fill="var(--color-primary)" />
+            <text x="350" y="169" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">2</text>
+            <text x="350" y="148" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Submit precertificate</text>
 
             {/* CT Logs */}
-            <rect x="460" y="100" width="150" height="55" rx="10" ry="10"
+            <rect x="450" y="140" width="160" height="60" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="535" y="124" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">CT Logs</text>
-            <text x="535" y="142" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(append-only)</text>
+            <text x="530" y="165" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">CT Logs</text>
+            <text x="530" y="182" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(append-only)</text>
 
-            {/* Merkle tree icon inside logs */}
-            <rect x="620" y="105" width="80" height="45" rx="6" ry="6"
-              fill="none" stroke="var(--color-border)" strokeWidth="1" strokeDasharray="3 2" />
-            <text x="660" y="122" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="9">Merkle</text>
-            <text x="660" y="134" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="9">Tree</text>
-            <line x1="660" y1="137" x2="645" y2="145" stroke="var(--color-border)" strokeWidth="1" />
-            <line x1="660" y1="137" x2="675" y2="145" stroke="var(--color-border)" strokeWidth="1" />
+            {/* Arrow 3: CT Logs → CA (return SCTs) */}
+            <path d="M 450 200 L 295 200 L 295 75" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" strokeDasharray="6 3" />
+            <circle cx="375" cy="200" r="9" fill="var(--color-primary)" />
+            <text x="375" y="204" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">3</text>
+            <text x="375" y="220" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Return SCTs</text>
 
-            {/* Arrow 3: CT Logs return SCTs to CA */}
-            <path d="M 460 155 L 300 155 L 300 85" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" strokeDasharray="6 3" />
-            <circle cx="380" cy="155" r="9" fill="var(--color-primary)" />
-            <text x="380" y="159" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">3</text>
-            <text x="380" y="175" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">Return SCTs</text>
+            {/* Arrow 5: Certificate → Browser (TLS handshake) */}
+            <path d="M 480 75 L 480 325 L 215 325" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
+            <circle cx="480" cy="290" r="9" fill="var(--color-primary)" />
+            <text x="480" y="294" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">5</text>
+            <text x="355" y="315" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">TLS handshake with SCTs</text>
 
-            {/* Arrow 4: CA issues cert with SCTs */}
-            <line x1="325" y1="57" x2="410" y2="57" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
-            <circle cx="368" cy="47" r="9" fill="var(--color-primary)" />
-            <text x="368" y="51" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">4</text>
-
-            {/* Certificate with SCTs */}
-            <rect x="410" y="30" width="130" height="55" rx="10" ry="10"
+            {/* Browser / Client */}
+            <rect x="50" y="300" width="165" height="55" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="475" y="52" textAnchor="middle" fill="var(--color-text-primary)" fontSize="12" fontWeight="600">Certificate</text>
-            <text x="475" y="68" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(with embedded</text>
-            <text x="475" y="80" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">SCTs)</text>
-
-            {/* Arrow 5: Certificate to Browser */}
-            <path d="M 475 85 L 475 210 L 195 210" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" />
-            <circle cx="475" cy="190" r="9" fill="var(--color-primary)" />
-            <text x="475" y="194" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">5</text>
-            <text x="350" y="203" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="10">TLS handshake with SCTs</text>
-
-            {/* Browser */}
-            <rect x="50" y="185" width="145" height="55" rx="10" ry="10"
-              fill="var(--color-surface-raised)" stroke="var(--color-primary)" strokeWidth="2" />
-            <text x="122" y="210" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Browser / Client</text>
-            <text x="122" y="227" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(verifies SCTs)</text>
+            <text x="132" y="323" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Browser / Client</text>
+            <text x="132" y="339" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(verifies SCTs)</text>
 
             {/* Step 6 label */}
-            <circle cx="92" cy="252" r="9" fill="var(--color-primary)" />
-            <text x="92" y="256" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">6</text>
-            <text x="170" y="258" fill="var(--color-text-secondary)" fontSize="10">Verify SCTs against known CT log keys</text>
+            <circle cx="100" cy="380" r="9" fill="var(--color-primary)" />
+            <text x="100" y="384" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">6</text>
+            <text x="185" y="382" fill="var(--color-text-secondary)" fontSize="10">Verify SCTs against known CT log keys</text>
 
-            {/* Monitor */}
-            <rect x="460" y="280" width="150" height="55" rx="10" ry="10"
+            {/* Monitors */}
+            <rect x="470" y="440" width="160" height="55" rx="10" ry="10"
               fill="var(--color-surface-raised)" stroke="var(--color-border)" strokeWidth="2" />
-            <text x="535" y="305" textAnchor="middle" fill="var(--color-text-primary)" fontSize="13" fontWeight="600">Monitors</text>
-            <text x="535" y="322" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(watch for fraud)</text>
+            <text x="550" y="463" textAnchor="middle" fill="var(--color-text-primary)" fontSize="14" fontWeight="600">Monitors</text>
+            <text x="550" y="479" textAnchor="middle" fill="var(--color-text-secondary)" fontSize="11">(watch for fraud)</text>
 
-            {/* Arrow 7: Monitor watches logs */}
-            <line x1="535" y1="280" x2="535" y2="160" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" strokeDasharray="5 3" />
-            <circle cx="535" cy="220" r="9" fill="var(--color-primary)" />
-            <text x="535" y="224" textAnchor="middle" fill="white" fontSize="10" fontWeight="700">7</text>
-            <text x="600" y="222" fill="var(--color-text-secondary)" fontSize="10">Continuously</text>
-            <text x="600" y="234" fill="var(--color-text-secondary)" fontSize="10">audit logs</text>
+            {/* Arrow 7: Monitors → CT Logs (continuously audit) */}
+            <line x1="550" y1="440" x2="550" y2="200" stroke="var(--color-text-secondary)" strokeWidth="2" markerEnd="url(#arrowhead-ct)" strokeDasharray="5 3" />
+            <circle cx="550" cy="320" r="9" fill="var(--color-primary)" />
+            <text x="550" y="324" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">7</text>
+            <text x="620" y="318" fill="var(--color-text-secondary)" fontSize="10">Continuously</text>
+            <text x="620" y="332" fill="var(--color-text-secondary)" fontSize="10">audit logs</text>
 
-            {/* Alert from Monitor to Domain Owner */}
-            <path d="M 460 310 L 75 310 L 75 85" fill="none" stroke="#e53e3e" strokeWidth="1.5" markerEnd="url(#arrowhead-alert)" strokeDasharray="5 3" />
-            <text x="270" y="330" textAnchor="middle" fill="#e53e3e" fontSize="10">Alert on unauthorized certificates</text>
+            {/* Alert: Monitors → Domain Owner */}
+            <path d="M 470 468 L 75 468 L 75 75" fill="none" stroke="#e53e3e" strokeWidth="1.5" markerEnd="url(#arrowhead-alert)" strokeDasharray="5 3" />
+            <text x="270" y="488" textAnchor="middle" fill="#e53e3e" fontSize="10">Alert on unauthorized certificates</text>
 
             <defs>
               <marker id="arrowhead-ct" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
