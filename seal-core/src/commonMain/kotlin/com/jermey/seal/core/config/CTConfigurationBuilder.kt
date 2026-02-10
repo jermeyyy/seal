@@ -5,6 +5,7 @@ import com.jermey.seal.core.loglist.LogListCache
 import com.jermey.seal.core.loglist.LogListDataSource
 import com.jermey.seal.core.model.VerificationResult
 import com.jermey.seal.core.policy.CTPolicy
+import com.jermey.seal.core.policy.AppleCtPolicy
 import com.jermey.seal.core.policy.ChromeCtPolicy
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -42,8 +43,26 @@ public class CTConfigurationBuilder {
         with(hostMatcher) { this@unaryMinus.unaryMinus() }
     }
 
-    /** CT compliance policy. Defaults to [ChromeCtPolicy]. */
+    /**
+     * CT compliance policy. Defaults to [ChromeCtPolicy].
+     *
+     * Available policies:
+     * - [ChromeCtPolicy] — Requires Google + non-Google operator diversity. Strictest option.
+     * - [AppleCtPolicy] — Requires 2+ distinct operators (any). More lenient.
+     *
+     * Example: `policy = AppleCtPolicy()`
+     */
     public var policy: CTPolicy = ChromeCtPolicy()
+
+    /** Use Chrome's CT policy (default). Requires Google + non-Google operator diversity. */
+    public fun useChromePolicy() {
+        policy = ChromeCtPolicy()
+    }
+
+    /** Use Apple's CT policy. Requires 2+ distinct operators (any). More lenient than Chrome. */
+    public fun useApplePolicy() {
+        policy = AppleCtPolicy()
+    }
 
     /** Whether to throw/fail on CT verification failure. Defaults to `false` (fail-open). */
     public var failOnError: Boolean = false

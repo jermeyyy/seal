@@ -22,6 +22,26 @@ public sealed class VerificationResult {
          */
         public data class Trusted(public val validScts: List<SctVerificationResult.Valid>) : Success()
 
+        /**
+         * CT compliance was confirmed by the operating system's built-in verifier
+         * (e.g., Apple's SecTrust CT evaluation).
+         *
+         * The OS handles TLS extension and OCSP SCTs internally and does not expose
+         * individual SCT details to the application, so [validScts][Trusted.validScts]
+         * is not available here.
+         *
+         * @property platform Identifies which OS verifier confirmed compliance (e.g., "iOS/SecTrust").
+         * @property ctConfirmed Whether the OS explicitly confirmed CT compliance (vs. implicit trust).
+         * @property coreVerificationResult The result from the library's own core verifier, if it was
+         *           attempted before falling back to the OS. Useful for debugging why core verification
+         *           failed (e.g., missing TLS extension SCTs). Null if core verification was not attempted.
+         */
+        public data class OsVerified(
+            public val platform: String,
+            public val ctConfirmed: Boolean = true,
+            public val coreVerificationResult: VerificationResult? = null,
+        ) : Success()
+
         /** Verification was skipped because the connection is not secured (plain HTTP). */
         public data object InsecureConnection : Success()
 

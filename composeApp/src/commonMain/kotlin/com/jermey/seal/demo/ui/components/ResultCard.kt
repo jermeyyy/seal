@@ -1,5 +1,6 @@
-package com.jermey.seal.demo
+package com.jermey.seal.demo.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
@@ -17,16 +18,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jermey.seal.core.model.VerificationResult
+import com.jermey.seal.demo.CtCheckResult
 
 /**
  * A card displaying the CT verification result for a single URL.
  */
 @Composable
-fun ResultCard(result: CtCheckResult, modifier: Modifier = Modifier) {
+fun ResultCard(
+    result: CtCheckResult,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
     val (icon, iconTint) = statusIconInfo(result.status)
 
     ElevatedCard(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .then(
+                if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
+            ),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -111,6 +122,8 @@ private fun statusDescription(status: CtCheckResult.Status): String = when (stat
 private fun describeResult(result: VerificationResult): String = when (result) {
     is VerificationResult.Success.Trusted ->
         "CT Verified — ${result.validScts.size} valid SCTs"
+    is VerificationResult.Success.OsVerified ->
+        "CT Verified (OS-level, ${result.platform})"
     is VerificationResult.Success.InsecureConnection ->
         "Insecure connection (no TLS)"
     is VerificationResult.Success.DisabledForHost ->

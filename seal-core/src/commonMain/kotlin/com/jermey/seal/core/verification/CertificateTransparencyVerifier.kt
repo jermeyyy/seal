@@ -100,6 +100,8 @@ public class CertificateTransparencyVerifier(
             when (result) {
                 is VerificationResult.Success.Trusted ->
                     println("SealCT: ✓ TRUSTED - CT policy satisfied with ${result.validScts.size} valid SCTs")
+                is VerificationResult.Success.OsVerified ->
+                    println("SealCT: ✓ OS-VERIFIED - CT confirmed by ${result.platform}")
                 is VerificationResult.Success.InsecureConnection ->
                     println("SealCT: ○ SKIPPED - Insecure connection")
                 is VerificationResult.Success.DisabledForHost ->

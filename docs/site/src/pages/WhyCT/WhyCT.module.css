@@ -152,19 +152,19 @@
 }
 
 /* Problem list items */
-.problemList {
+.whyCT .problemList {
   list-style: none;
   padding-left: 0;
 }
 
-.problemList li {
+.whyCT .problemList li {
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
 }
 
-.problemList li::before {
-  content: "\00d7";
+.whyCT .problemList li::before {
+  content: "\00d7\FE0E";
   position: absolute;
   left: 0;
   color: #e53e3e;
@@ -173,19 +173,19 @@
 }
 
 /* Benefit list items */
-.benefitList {
+.whyCT .benefitList {
   list-style: none;
   padding-left: 0;
 }
 
-.benefitList li {
+.whyCT .benefitList li {
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
 }
 
-.benefitList li::before {
-  content: "\2713";
+.whyCT .benefitList li::before {
+  content: "\2713\FE0E";
   position: absolute;
   left: 0;
   color: #38a169;

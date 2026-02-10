@@ -85,7 +85,11 @@ public class IosCertificateTransparencyVerifier(
 
             if (osCtCompliant) {
                 // OS reports CT compliance (TLS/OCSP SCTs verified by system)
-                val result = VerificationResult.Success.Trusted(emptyList())
+                val result = VerificationResult.Success.OsVerified(
+                    platform = "iOS/SecTrust",
+                    ctConfirmed = true,
+                    coreVerificationResult = coreResult,
+                )
                 configuration.logger?.invoke(host, result)
                 return result
             }

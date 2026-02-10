@@ -13,7 +13,7 @@
   <a href="https://central.sonatype.com/search?q=io.github.jermeyyy"><img src="https://img.shields.io/maven-central/v/io.github.jermeyyy/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" /></a>
   <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" /></a>
   <a href="https://www.jetbrains.com/kotlin-multiplatform/"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-4285F4?logo=android&logoColor=white" alt="Platforms" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
 </p>
 
 ---
@@ -253,6 +253,26 @@ Excludes always take precedence over includes.
 
 For full reference, see [Configuration](https://jermeyyy.github.io/seal/guides/configuration).
 
+## CT Policy Selection
+
+By default, Seal uses `ChromeCtPolicy`, which requires SCTs from at least one Google-operated
+log and one non-Google log. This mirrors Chrome's behavior but can be too strict for some
+certificates.
+
+If you encounter "Too few distinct operators" failures, you can switch to Apple's policy:
+
+```kotlin
+// Kotlin DSL
+installCertificateTransparency {
+    useApplePolicy() // or: policy = AppleCtPolicy()
+}
+```
+
+| Policy | SCT Count (< 180 days) | SCT Count (≥ 180 days) | Operator Diversity |
+|--------|----------------------|----------------------|-------------------|
+| `ChromeCtPolicy` | ≥ 2 | ≥ 3 | 1 Google + 1 non-Google |
+| `AppleCtPolicy` | ≥ 2 | ≥ 3 | 2+ distinct (any) |
+
 ## Custom Policies
 
 Seal ships with two built-in CT policies:
@@ -452,21 +472,7 @@ Please ensure all tests pass (`./gradlew allTests`) and follow the existing code
 
 ## License
 
-```
-Copyright 2026 Jermey
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

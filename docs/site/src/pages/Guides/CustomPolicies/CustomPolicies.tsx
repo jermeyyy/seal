@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import CodeBlock from '@components/CodeBlock/CodeBlock'
 import styles from '../Guides.module.css'
-import { customPolicyExample } from '@data/codeExamples'
+import { customPolicyExample, customPolicyCreationExample, customPolicyUsageExample } from '@data/codeExamples'
 
 export default function CustomPolicies() {
   return (
@@ -58,6 +58,40 @@ export default function CustomPolicies() {
           You only need to explicitly set a policy if you want to use 
           <code>AppleCtPolicy</code> or a custom implementation.</p>
         </div>
+      </section>
+
+      <section>
+        <h2 id="custom-policy">Creating a Custom Policy</h2>
+        <p>
+          <code>CTPolicy</code> is a <code>fun interface</code> with a single <code>evaluate</code> method, 
+          making it easy to create your own policy — either as a class or a lambda.
+        </p>
+        <p>
+          The <code>evaluate</code> method receives two parameters:
+        </p>
+        <ul>
+          <li><code>certificateLifetimeDays</code> — the lifetime of the certificate in days, useful for scaling SCT requirements</li>
+          <li><code>sctResults</code> — a list of <code>SctVerificationResult</code> values, each either <code>Valid</code> (with the SCT and log operator) or an <code>Invalid</code> subtype such as <code>FailedVerification</code>, <code>LogNotTrusted</code>, <code>LogExpired</code>, <code>LogRejected</code>, or <code>SignatureMismatch</code></li>
+        </ul>
+        <p>
+          The method returns a <code>VerificationResult</code>: either <code>Success.Trusted</code> with the 
+          valid SCTs, or a <code>Failure</code> variant such as <code>NoScts</code>, <code>TooFewSctsTrusted</code>, 
+          <code>TooFewDistinctOperators</code>, or <code>LogServersFailed</code>.
+        </p>
+
+        <CodeBlock code={customPolicyCreationExample} language="kotlin" title="Custom Policy Implementation" />
+
+        <div className={styles.note}>
+          <p><strong>💡 Note:</strong> Because <code>CTPolicy</code> is a <code>fun interface</code>, 
+          you can use a lambda expression for simple policies instead of creating a full class.</p>
+        </div>
+
+        <p>
+          To use your custom policy, pass it to the <code>policy</code> property in the 
+          configuration block:
+        </p>
+
+        <CodeBlock code={customPolicyUsageExample} language="kotlin" title="Using a Custom Policy" />
       </section>
 
       <section>

@@ -6,10 +6,16 @@ import com.jermey.seal.core.model.VerificationResult
 /**
  * Apple CT policy implementation.
  *
- * Rules:
+ * This policy mirrors Apple's Certificate Transparency requirements:
  * - Certificate lifetime ≤ 180 days → requires ≥ 2 valid SCTs
  * - Certificate lifetime > 180 days → requires ≥ 3 valid SCTs
- * - Operator diversity: at least 2 SCTs must be from distinct log operators
+ * - **Operator diversity:** at least 2 SCTs must be from distinct log operators (any operators).
+ *
+ * Unlike [ChromeCtPolicy], this policy does **not** require a Google-specific operator.
+ * It only requires that SCTs come from at least 2 different operators, regardless of who they are.
+ * This makes it more lenient for certificates using non-Google CT logs.
+ *
+ * @see ChromeCtPolicy
  */
 public class AppleCtPolicy : CTPolicy {
 

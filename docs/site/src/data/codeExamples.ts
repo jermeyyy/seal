@@ -33,6 +33,18 @@ export const gradleDependencies = `kotlin {
     }
 }`;
 
+export const androidVersionCatalogConfig = `[versions]
+seal = "${LIBRARY_VERSION}"
+
+[libraries]
+seal-core = { module = "${MAVEN_ARTIFACTS.core}", version.ref = "seal" }
+seal-android = { module = "${MAVEN_ARTIFACTS.android}", version.ref = "seal" }`;
+
+export const androidGradleDependencies = `dependencies {
+    implementation("${getArtifactCoordinate('core')}")
+    implementation("${getArtifactCoordinate('android')}")
+}`;
+
 // ============================================================================
 // OKHTTP EXAMPLES
 // ============================================================================
@@ -138,6 +150,57 @@ certificateTransparencyInterceptor {
     policy = applePolicy
 }`;
 
+export const customPolicyCreationExample = `// Custom policy: require at least 2 valid SCTs from distinct operators
+class StrictOperatorDiversityPolicy : CTPolicy {
+    override fun evaluate(
+        certificateLifetimeDays: Long,
+        sctResults: List<SctVerificationResult>,
+    ): VerificationResult {
+        val validScts = sctResults.filterIsInstance<SctVerificationResult.Valid>()
+        
+        if (validScts.isEmpty()) {
+            return VerificationResult.Failure.NoScts
+        }
+        
+        val distinctOperators = validScts.mapNotNull { it.logOperator }.distinct()
+        
+        if (distinctOperators.size < 2) {
+            return VerificationResult.Failure.TooFewDistinctOperators(
+                found = distinctOperators.size,
+                required = 2,
+            )
+        }
+        
+        return VerificationResult.Success.Trusted(validScts)
+    }
+}
+
+// Lambda syntax (CTPolicy is a fun interface)
+val minimalPolicy = CTPolicy { _, sctResults ->
+    val valid = sctResults.filterIsInstance<SctVerificationResult.Valid>()
+    if (valid.isNotEmpty()) {
+        VerificationResult.Success.Trusted(valid)
+    } else {
+        VerificationResult.Failure.NoScts
+    }
+}`;
+
+export const customPolicyUsageExample = `// Use your custom policy with OkHttp
+val client = OkHttpClient.Builder()
+    .addNetworkInterceptor(
+        certificateTransparencyInterceptor {
+            policy = StrictOperatorDiversityPolicy()
+        }
+    )
+    .build()
+
+// Or with Ktor
+val httpClient = HttpClient(OkHttp) {
+    install(CertificateTransparency) {
+        policy = StrictOperatorDiversityPolicy()
+    }
+}`;
+
 // ============================================================================
 // iOS EXAMPLES
 // ============================================================================
@@ -193,6 +256,8 @@ export type CodeExampleKey = keyof typeof codeExamples;
 export const codeExamples = {
   versionCatalogConfig,
   gradleDependencies,
+  androidVersionCatalogConfig,
+  androidGradleDependencies,
   okhttpBasicExample,
   okhttpDslExample,
   okhttpNetworkInterceptorNote,
@@ -200,6 +265,8 @@ export const codeExamples = {
   ktorDslExample,
   ktorMultiplatformExample,
   customPolicyExample,
+  customPolicyCreationExample,
+  customPolicyUsageExample,
   iosUrlSessionExample,
   configurationFullExample,
 } as const;

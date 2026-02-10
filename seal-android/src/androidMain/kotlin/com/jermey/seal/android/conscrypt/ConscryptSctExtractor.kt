@@ -90,6 +90,27 @@ internal class ConscryptSctExtractor {
     }
 
     /**
+     * Extract raw OCSP response bytes for the leaf certificate from a Conscrypt TLS socket.
+     * The core verifier will parse SCTs from this OCSP response.
+     *
+     * @param socket The TLS socket from the connection.
+     * @return Raw OCSP response DER bytes for the leaf cert, or null if unavailable.
+     */
+    fun getRawOcspResponseData(socket: SSLSocket): ByteArray? {
+        if (!Conscrypt.isConscrypt(socket)) return null
+        return try {
+            val session = socket.session ?: return null
+            val ocspResponses = getOcspResponses(session) ?: return null
+            val leafOcsp = ocspResponses.firstOrNull()
+            Log.d("SealCT", "Raw OCSP response data: ${leafOcsp?.size ?: 0} bytes")
+            if (leafOcsp != null && leafOcsp.isNotEmpty()) leafOcsp else null
+        } catch (e: Exception) {
+            Log.e("SealCT", "Error getting raw OCSP response data", e)
+            null
+        }
+    }
+
+    /**
      * Reflectively call `getPeerSignedCertificateTimestamp()` on the Conscrypt session.
      * This method is on the package-private `ConscryptSession` interface.
      */
