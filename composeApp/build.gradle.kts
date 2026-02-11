@@ -23,6 +23,22 @@ kotlin {
         }
     }
 
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+    }
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            commonWebpackConfig {
+                outputFileName = "seal-demo.js"
+            }
+        }
+        binaries.executable()
+    }
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -62,15 +78,32 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.okhttp)
-            implementation(project(":seal-android"))
+        }
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.okhttp)
+            }
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(project(":seal-ios"))
+        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.jermey.seal.MainKt"
     }
 }
 

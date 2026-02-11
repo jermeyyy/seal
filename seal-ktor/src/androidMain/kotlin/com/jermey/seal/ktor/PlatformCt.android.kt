@@ -1,6 +1,6 @@
 package com.jermey.seal.ktor
 
-import com.jermey.seal.android.okhttp.installCertificateTransparency
+import com.jermey.seal.jvm.okhttp.installCertificateTransparency
 import com.jermey.seal.core.config.CTConfiguration
 import com.jermey.seal.core.config.CTConfigurationBuilder
 import io.ktor.client.HttpClientConfig
@@ -25,7 +25,7 @@ internal actual fun installPlatformCt(
  * using the OkHttp engine.
  *
  * Configures the OkHttp engine with a Conscrypt SSLSocketFactory that enables CT
- * and a [CertificateTransparencyInterceptor][com.jermey.seal.android.okhttp.CertificateTransparencyInterceptor]
+ * and a [CertificateTransparencyInterceptor][com.jermey.seal.jvm.okhttp.CertificateTransparencyInterceptor]
  * as a network interceptor, performing CT verification on every HTTPS connection.
  *
  * Usage:

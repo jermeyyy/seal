@@ -20,8 +20,19 @@ kotlin {
         }
     }
 
+    jvm {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+    }
+
     iosArm64()
     iosSimulatorArm64()
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -29,19 +40,25 @@ kotlin {
             implementation(libs.ktor.client.core)
         }
         androidMain.dependencies {
-            implementation(project(":seal-android"))
+            implementation(libs.ktor.client.okhttp)
+        }
+        jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
-            implementation(project(":seal-ios"))
             implementation(libs.ktor.client.darwin)
+        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
         }
     }
 }
 
 dokka {
     moduleName.set("Seal - Ktor")
-    moduleVersion.set("0.1.0")
+    moduleVersion.set("0.2.0")
 
     dokkaPublications.html {
         outputDirectory.set(layout.buildDirectory.dir("dokka/html"))

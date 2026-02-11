@@ -15,7 +15,7 @@ kotlin {
 
     dependencies {
         implementation(projects.composeApp)
-        implementation(projects.sealAndroid)
+        implementation(projects.sealCore)
         implementation(libs.androidx.activity.compose)
         implementation(libs.compose.uiToolingPreview)
         implementation(libs.koin.core)
