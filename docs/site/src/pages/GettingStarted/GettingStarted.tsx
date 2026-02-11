@@ -4,8 +4,6 @@ import styles from './GettingStarted.module.css'
 import {
   versionCatalogConfig,
   gradleDependencies,
-  androidVersionCatalogConfig,
-  androidGradleDependencies,
   okhttpBasicExample,
   ktorBasicExample,
 } from '@data/codeExamples'
@@ -23,31 +21,17 @@ export default function GettingStarted() {
       <section>
         <h2 id="installation">Installation</h2>
 
+        <h3 id="version-catalog">Version Catalog Configuration</h3>
         <p>
-          Seal supports both Kotlin Multiplatform and native Android projects. Choose the setup that matches your project.
+          Add the Seal dependencies to your Gradle version catalog:
         </p>
-
-        <h3 id="kmp-setup">Kotlin Multiplatform Setup</h3>
-        <p>
-          For KMP projects targeting Android and iOS, add all relevant Seal modules:
-        </p>
-
-        <h4 id="kmp-version-catalog">Version Catalog</h4>
         <CodeBlock code={versionCatalogConfig} language="bash" title="gradle/libs.versions.toml" />
 
-        <h4 id="kmp-gradle-dependencies">Gradle Dependencies</h4>
-        <CodeBlock code={gradleDependencies} language="kotlin" title="build.gradle.kts" />
-
-        <h3 id="android-setup">Native Android Setup</h3>
+        <h3 id="gradle-dependencies">Gradle Dependencies</h3>
         <p>
-          For Android-only projects using OkHttp, you only need the core and Android modules:
+          Configure module dependencies in your KMP project's <code>build.gradle.kts</code>:
         </p>
-
-        <h4 id="android-version-catalog">Version Catalog</h4>
-        <CodeBlock code={androidVersionCatalogConfig} language="bash" title="gradle/libs.versions.toml" />
-
-        <h4 id="android-gradle-dependencies">Gradle Dependencies</h4>
-        <CodeBlock code={androidGradleDependencies} language="kotlin" title="build.gradle.kts" />
+        <CodeBlock code={gradleDependencies} language="kotlin" title="build.gradle.kts" />
       </section>
 
       <section>
@@ -85,13 +69,23 @@ export default function GettingStarted() {
           <tbody>
             <tr>
               <td>Android</td>
-              <td>API 21+</td>
+              <td>API 24+</td>
               <td>OkHttp / Ktor (OkHttp engine)</td>
             </tr>
             <tr>
               <td>iOS</td>
               <td>iOS 13+</td>
               <td>Ktor (Darwin engine)</td>
+            </tr>
+            <tr>
+              <td>JVM Desktop</td>
+              <td>JDK 11+</td>
+              <td>OkHttp / Ktor (OkHttp engine)</td>
+            </tr>
+            <tr>
+              <td>Web (wasmJs)</td>
+              <td>Modern browser</td>
+              <td>Ktor (browser-native CT)</td>
             </tr>
           </tbody>
         </table>
@@ -109,15 +103,7 @@ export default function GettingStarted() {
           <tbody>
             <tr>
               <td><code>seal-core</code></td>
-              <td>Core CT verification logic, models, log list parsing, and policies</td>
-            </tr>
-            <tr>
-              <td><code>seal-android</code></td>
-              <td>Android-specific: OkHttp interceptor, Conscrypt SCT extraction</td>
-            </tr>
-            <tr>
-              <td><code>seal-ios</code></td>
-              <td>iOS-specific: SecTrust integration, Darwin networking support</td>
+              <td>Core CT verification logic, platform integrations (OkHttp interceptor, Conscrypt, SecTrust), models, log list parsing, and policies</td>
             </tr>
             <tr>
               <td><code>seal-ktor</code></td>

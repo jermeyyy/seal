@@ -13,7 +13,7 @@ export default function Ktor() {
       <h1>Ktor Integration</h1>
       <p className={styles.intro}>
         Use the Seal Ktor plugin for Certificate Transparency verification in 
-        Kotlin Multiplatform projects. Works on both Android and iOS with 
+        Kotlin Multiplatform projects. Works on Android, iOS, JVM Desktop, and Web with 
         the same configuration.
       </p>
 
@@ -60,6 +60,16 @@ export default function Ktor() {
               <td>Darwin</td>
               <td>SecTrust API</td>
             </tr>
+            <tr>
+              <td>JVM Desktop</td>
+              <td>OkHttp</td>
+              <td>Conscrypt TLS extension</td>
+            </tr>
+            <tr>
+              <td>Web (wasmJs)</td>
+              <td>Js</td>
+              <td>Browser-native CT (audit mode)</td>
+            </tr>
           </tbody>
         </table>
       </section>
@@ -67,8 +77,9 @@ export default function Ktor() {
       <section>
         <h2 id="engine-selection">Engine Selection</h2>
         <p>
-          When using Ktor on Android, make sure you're using the OkHttp engine. On iOS, 
-          the Darwin engine is used automatically. The CT plugin integrates with each 
+          When using Ktor on Android or JVM Desktop, make sure you're using the OkHttp engine. On iOS, 
+          the Darwin engine is used automatically. On Web (wasmJs), the browser handles CT natively — 
+          Seal runs in audit mode only. The CT plugin integrates with each 
           engine's native TLS stack to extract SCTs.
         </p>
 

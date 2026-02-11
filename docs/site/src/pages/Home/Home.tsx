@@ -21,6 +21,8 @@ export default function Home() {
         <div className={styles.badges}>
           <img src="https://img.shields.io/badge/-android-6EDB8D.svg?style=flat&logo=android" alt="Android" />
           <img src="https://img.shields.io/badge/-ios-CDCDCD.svg?style=flat&logo=apple" alt="iOS" />
+          <img src="https://img.shields.io/badge/-jvm-DB413D.svg?style=flat&logo=openjdk" alt="JVM Desktop" />
+          <img src="https://img.shields.io/badge/-wasm-624DE8.svg?style=flat&logo=webassembly" alt="Web" />
         </div>
         
         <div className={styles.heroButtons}>
@@ -35,8 +37,8 @@ export default function Home() {
         <p>
           <strong>Seal</strong> is a Certificate Transparency (CT) verification library for 
           Kotlin Multiplatform. It enforces CT compliance on HTTPS connections, ensuring that 
-          TLS certificates are logged in public transparency logs. Seal supports Android and iOS, 
-          with integrations for both OkHttp and Ktor HTTP clients.
+          TLS certificates are logged in public transparency logs. Seal supports Android, iOS, 
+          JVM Desktop, and Web (wasmJs), with integrations for both OkHttp and Ktor HTTP clients.
         </p>
       </section>
 
@@ -57,20 +59,20 @@ export default function Home() {
 
           <div className={styles.featureCard}>
             <h4>Kotlin Multiplatform</h4>
-            <p>One library for Android and iOS. Write your CT configuration once in shared 
-            code and it works on both platforms automatically.</p>
+            <p>One library for Android, iOS, JVM Desktop, and Web. Write your CT configuration once in shared 
+            code and it works on all platforms automatically.</p>
           </div>
 
           <div className={styles.featureCard}>
             <h4>OkHttp Integration</h4>
             <p>Drop-in network interceptor for OkHttp. Add CT verification to your existing 
-            Android networking stack with a single line of code.</p>
+            Android or JVM Desktop networking stack with a single line of code.</p>
           </div>
 
           <div className={styles.featureCard}>
             <h4>Ktor Plugin</h4>
-            <p>Native Ktor plugin for multiplatform HTTP clients. Works with both OkHttp 
-            engine on Android and Darwin engine on iOS.</p>
+            <p>Native Ktor plugin for multiplatform HTTP clients. Works with OkHttp 
+            engine on Android and JVM Desktop, Darwin engine on iOS, and browser-native CT on Web.</p>
           </div>
 
           <div className={styles.featureCard}>
@@ -98,7 +100,7 @@ export default function Home() {
         <div className={styles.callout}>
           <div>
             <strong>Tip:</strong> Use <code>seal-ktor</code> for multiplatform projects — it provides 
-            a unified API that works on both Android and iOS.
+            a unified API that works on Android, iOS, JVM Desktop, and Web.
           </div>
         </div>
       </section>
@@ -112,7 +114,7 @@ export default function Home() {
         
         <div className={styles.steps}>
           <div className={styles.step}>
-            <h3>Option 1: OkHttp (Android)</h3>
+            <h3>Option 1: OkHttp (Android / JVM Desktop)</h3>
             <p>Add a network interceptor to your OkHttp client:</p>
             <CodeBlock code={okhttpBasicExample} language="kotlin" title="OkHttp Setup" />
           </div>
