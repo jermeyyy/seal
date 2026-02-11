@@ -77,8 +77,6 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Published Artifacts" >> "$GITHUB_STEP_SUMMARY"
           echo "- \`io.github.jermeyyy:seal-core:$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "- \`io.github.jermeyyy:seal-android:$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "- \`io.github.jermeyyy:seal-ios:$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- \`io.github.jermeyyy:seal-ktor:$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Maven Central" >> "$GITHUB_STEP_SUMMARY"

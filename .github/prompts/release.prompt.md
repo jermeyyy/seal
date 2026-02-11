@@ -18,11 +18,9 @@ If any check fails, stop and inform the user.
 
 ## Step 1: Bump Versions in Gradle Module Build Files
 
-Update `version = "..."` AND `moduleVersion.set("...")` in these 4 files:
+Update `version = "..."` AND `moduleVersion.set("...")` in these 2 files:
 
 - `seal-core/build.gradle.kts`
-- `seal-android/build.gradle.kts`
-- `seal-ios/build.gradle.kts`
 - `seal-ktor/build.gradle.kts`
 
 Each file has two version strings to update:
@@ -131,8 +129,6 @@ You can monitor the workflow at: https://github.com/jermeyyy/seal/actions/workfl
 | File | Change |
 |------|--------|
 | `seal-core/build.gradle.kts` | `version` and `moduleVersion` → `$input` |
-| `seal-android/build.gradle.kts` | `version` and `moduleVersion` → `$input` |
-| `seal-ios/build.gradle.kts` | `version` and `moduleVersion` → `$input` |
 | `seal-ktor/build.gradle.kts` | `version` and `moduleVersion` → `$input` |
 | `docs/site/src/data/constants.ts` | `LIBRARY_VERSION` → `$input` |
 | `README.md` | Verified — no hardcoded versions to update |

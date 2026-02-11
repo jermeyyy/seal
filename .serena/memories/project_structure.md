@@ -29,8 +29,8 @@ seal/                              # Root project (name: "Seal")
 │       └── Simple-Developer.agent.md
 ├── art/                           # Logo and assets
 │
-├── seal-core/                     # KMP library: models, ASN.1, SCT parsing, X.509, verification, policy, log list
-│   ├── build.gradle.kts           # KMP (android + iosArm64 + iosSimulatorArm64), explicitApi()
+├── seal-core/                     # KMP library: models, ASN.1, SCT parsing, X.509, verification, policy, platform integrations
+│   ├── build.gradle.kts           # KMP (android + iOS + jvm + wasmJs), explicitApi()
 │   └── src/
 │       ├── commonMain/kotlin/com/jermey/seal/core/
 │       │   ├── model/             # SCT, VerificationResult, LogServer, LogId, etc.
@@ -43,51 +43,32 @@ seal/                              # Root project (name: "Seal")
 │       │   ├── config/            # CTConfiguration, CTConfigurationBuilder, ctConfiguration {}
 │       │   ├── host/              # HostPattern, HostMatcher
 │       │   └── loglist/           # LogListService, LogListParser, LogListMapper, EmbeddedLogListData, DTOs, cache
-│       ├── androidMain/kotlin/com/jermey/seal/core/
-│       │   ├── crypto/CryptoProvider.android.kt   # JCE-based CryptoVerifier
-│       │   └── loglist/ResourceLoader.android.kt  # ClassLoader resource loading
-│       │              DiskLogListCache.android.kt  # File-based cache
-│       ├── iosMain/kotlin/com/jermey/seal/core/
-│       │   ├── crypto/CryptoProvider.ios.kt       # Security framework CryptoVerifier
-│       │   └── loglist/ResourceLoader.ios.kt      # NSBundle resource loading
-│       │              DiskLogListCache.ios.kt      # NSFileManager-based cache
-│       └── commonTest/kotlin/com/jermey/seal/core/
-│           ├── asn1/              # Asn1ParserTest, OidTest
-│           ├── host/              # HostPatternTest, HostMatcherTest
-│           ├── loglist/           # LogListServiceTest, LogListParserTest
-│           ├── config/            # CTConfigurationBuilderTest
-│           ├── parser/            # SctDeserializerTest
-│           ├── x509/              # CertificateParserTest
-│           ├── verification/      # SctSignatureVerifierTest, CertificateTransparencyVerifierTest
-│           └── policy/            # PolicyTest
-│
-├── seal-android/                  # Android library: Conscrypt, OkHttp, TrustManager
-│   ├── build.gradle.kts           # KMP (android-only), explicitApi(), withHostTest
-│   └── src/
-│       ├── androidMain/kotlin/com/jermey/seal/android/
+│       ├── jvmSharedMain/kotlin/com/jermey/seal/jvm/
 │       │   ├── okhttp/            # CertificateTransparencyInterceptor, ConscryptCtSocketFactory
 │       │   ├── conscrypt/         # ConscryptSctExtractor, OcspResponseParser
 │       │   ├── chain/             # CertificateChainCleaner
-│       │   ├── trust/             # CTTrustManager, CTTrustManagerFactory
-│       │   ├── cache/             # AndroidDiskCache
-│       │   └── ConscryptInitializer.kt
-│       └── androidHostTest/kotlin/com/jermey/seal/android/
-│           └── CertificateTransparencyInterceptorTest
-│
-├── seal-ios/                      # KMP library (iOS only): SecTrust, URLSession
-│   ├── build.gradle.kts           # KMP (iosArm64 + iosSimulatorArm64), explicitApi()
-│   └── src/iosMain/kotlin/com/jermey/seal/ios/
-│       ├── IosCertificateTransparencyVerifier.kt
-│       ├── sectrust/              # SecTrustCertificateExtractor, SecTrustCtChecker
-│       ├── urlsession/            # UrlSessionCtHelper
-│       └── cache/                 # IosDiskCache
+│       │   └── trust/             # CTTrustManager, CTTrustManagerFactory
+│       ├── androidMain/kotlin/com/jermey/seal/core/
+│       │   ├── crypto/            # JCE-based CryptoVerifier
+│       │   └── loglist/           # Android resource loading, disk cache
+│       ├── jvmMain/kotlin/com/jermey/seal/core/
+│       │   └── loglist/           # JVM disk cache, resource loading
+│       ├── iosMain/kotlin/com/jermey/seal/
+│       │   ├── ios/               # IosCertificateTransparencyVerifier, SecTrust, URLSession helpers
+│       │   ├── core/crypto/       # Security framework CryptoVerifier
+│       │   └── core/loglist/      # NSBundle resource loading, iOS disk cache
+│       ├── wasmJsMain/            # Browser integration (audit mode only)
+│       ├── commonTest/            # 12 test classes
+│       └── jvmSharedTest/         # OkHttp interceptor integration tests
 │
 ├── seal-ktor/                     # KMP library: Ktor HttpClient plugin
-│   ├── build.gradle.kts           # KMP (android + iOS), explicitApi()
+│   ├── build.gradle.kts           # KMP (android + iOS + jvm + wasmJs), explicitApi()
 │   └── src/
 │       ├── commonMain/            # CertificateTransparency plugin, installPlatformCt() expect
 │       ├── androidMain/           # installPlatformCt() actual (OkHttp)
-│       └── iosMain/               # installPlatformCt() actual (Darwin)
+│       ├── jvmMain/               # installPlatformCt() actual (OkHttp)
+│       ├── iosMain/               # installPlatformCt() actual (Darwin)
+│       └── wasmJsMain/            # installPlatformCt() actual (browser-native)
 │
 ├── composeApp/                    # Demo app — shared Compose Multiplatform UI
 │   ├── build.gradle.kts           # KMP + Compose + Serialization
@@ -104,6 +85,8 @@ seal/                              # Root project (name: "Seal")
 │       │       └── Engine.kt
 │       ├── androidMain/           # Platform actuals for demo
 │       ├── iosMain/               # Platform actuals + MainViewController
+│       ├── desktopMain/           # JVM Desktop platform actuals
+│       ├── wasmJsMain/            # Web platform actuals
 │       └── commonTest/            # ComposeAppCommonTest
 │
 ├── androidApp/                    # Android host app for demo
@@ -129,8 +112,6 @@ seal/                              # Root project (name: "Seal")
 ## Test Coverage Summary
 | Module | Tests | Coverage |
 |--------|-------|----------|
-| seal-core | 12 test classes (commonTest) | ASN.1, OID, host matching, log list, config, SCT parsing, X.509, verification, policy |
-| seal-android | 1 test class (androidHostTest) | OkHttp interceptor integration |
-| seal-ios | 0 | No tests |
+| seal-core | 12 test classes (commonTest) + jvmSharedTest | ASN.1, OID, host matching, log list, config, SCT parsing, X.509, verification, policy, OkHttp interceptor |
 | seal-ktor | 0 | No tests |
 | composeApp | 1 test class (commonTest) | Basic smoke test |

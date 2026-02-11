@@ -19,10 +19,18 @@ export default function Home() {
         </p>
         
         <div className={styles.badges}>
-          <img src="https://img.shields.io/badge/-android-6EDB8D.svg?style=flat&logo=android" alt="Android" />
-          <img src="https://img.shields.io/badge/-ios-CDCDCD.svg?style=flat&logo=apple" alt="iOS" />
-          <img src="https://img.shields.io/badge/-jvm-DB413D.svg?style=flat&logo=openjdk" alt="JVM Desktop" />
-          <img src="https://img.shields.io/badge/-wasm-624DE8.svg?style=flat&logo=webassembly" alt="Web" />
+          <a href="https://central.sonatype.com/search?q=io.github.jermeyyy" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/maven-central/v/io.github.jermeyyy/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" />
+          </a>
+          <a href="https://kotlinlang.org" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" />
+          </a>
+          <a href="https://www.jetbrains.com/kotlin-multiplatform/" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20JVM%20Desktop%20%7C%20Web-4285F4?logo=kotlin&logoColor=white" alt="Platforms" />
+          </a>
+          <a href="https://github.com/jermeyyy/seal/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+          </a>
         </div>
         
         <div className={styles.heroButtons}>

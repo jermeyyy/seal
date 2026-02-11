@@ -15,7 +15,7 @@ Ensure all modules compile without errors.
 All existing tests must pass. If you added new functionality, ensure corresponding tests exist.
 
 ### 3. Check explicitApi Compliance
-Library modules (`seal-core`, `seal-android`, `seal-ios`, `seal-ktor`) use `explicitApi()`. All public symbols must have explicit visibility modifiers (`public`, `internal`, `private`).
+Library modules (`seal-core`, `seal-ktor`) use `explicitApi()`. All public symbols must have explicit visibility modifiers (`public`, `internal`, `private`).
 
 ### 4. Verify API Consistency
 - New public API should follow the DSL builder pattern where applicable
