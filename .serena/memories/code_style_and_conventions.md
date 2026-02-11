@@ -9,8 +9,8 @@
 ## Package Structure
 - Base package: `com.jermey.seal`
 - Core module: `com.jermey.seal.core` (sub-packages: model, asn1, parser, x509, crypto, verification, policy, config, host, loglist)
-- Android module: `com.jermey.seal.android` (sub-packages: okhttp, conscrypt, chain, trust, cache)
-- iOS module: `com.jermey.seal.ios` (sub-packages: sectrust, urlsession, cache)
+- JVM shared (in seal-core): `com.jermey.seal.jvm` (sub-packages: okhttp, conscrypt, chain, trust)
+- iOS (in seal-core): `com.jermey.seal.ios` (sub-packages: sectrust, urlsession, cache)
 - Ktor module: `com.jermey.seal.ktor`
 - Demo app: `com.jermey.seal.demo` (sub-packages: data, mvi, ui, di, navigation)
 
@@ -23,7 +23,7 @@
 - Value classes where appropriate (`LogId`)
 
 ## File Organization
-- KMP source sets: `commonMain`, `androidMain`, `iosMain`, `commonTest`, `androidHostTest`
+- KMP source sets: `commonMain`, `jvmSharedMain`, `androidMain`, `jvmMain`, `iosMain`, `wasmJsMain`, `commonTest`, `jvmSharedTest`
 - Source root: `src/<sourceSet>/kotlin/com/jermey/seal/`
 - Resources: `composeResources/` for Compose resources
 - Android resources: standard `res/` directory

@@ -9,6 +9,12 @@ cd seal
 # Run the Android demo app
 ./gradlew :composeApp:installDebug
 
+# Run the Desktop demo app
+./gradlew :composeApp:run
+
+# Run the Web demo app
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+
 # Run on iOS (macOS only)
 open iosApp/iosApp.xcodeproj`
 
@@ -36,19 +42,27 @@ export default function Demo() {
       <h1>Demo Application</h1>
       <p className={styles.intro}>
         The Seal demo application showcases Certificate Transparency verification in action. 
-        See how CT enforcement works on real HTTPS connections across Android and iOS.
+        See how CT enforcement works on real HTTPS connections across Android, iOS, JVM Desktop, and Web.
       </p>
 
       <section>
         <h2 id="screenshots">Screenshots</h2>
         <div className={styles.screenshotsGrid}>
           <div className={styles.screenshotCard}>
-            <img src={`${import.meta.env.BASE_URL}demo-android.png`} alt="Seal demo app on Android" className={styles.screenshotImg} />
+            <img src="/demo-android.png" alt="Seal demo app on Android" className={styles.screenshotImg} />
             <p className={styles.screenshotCaption}>Android</p>
           </div>
           <div className={styles.screenshotCard}>
-            <img src={`${import.meta.env.BASE_URL}demo-ios.png`} alt="Seal demo app on iOS" className={styles.screenshotImg} />
+            <img src="/demo-ios.png" alt="Seal demo app on iOS" className={styles.screenshotImg} />
             <p className={styles.screenshotCaption}>iOS</p>
+          </div>
+          <div className={styles.screenshotCard}>
+            <img src="/demo-desktop.png" alt="Seal demo app on JVM Desktop" className={styles.screenshotImg} />
+            <p className={styles.screenshotCaption}>JVM Desktop</p>
+          </div>
+          <div className={styles.screenshotCard}>
+            <img src="/demo-web.png" alt="Seal demo app on Web" className={styles.screenshotImg} />
+            <p className={styles.screenshotCaption}>Web</p>
           </div>
         </div>
       </section>
@@ -83,7 +97,7 @@ export default function Demo() {
 
           <div className={styles.featureCard}>
             <h3>Multiplatform</h3>
-            <p>Same verification logic running on both Android (OkHttp) and iOS (Darwin).</p>
+            <p>Same verification logic running on Android (OkHttp), iOS (Darwin), JVM Desktop (OkHttp), and Web (browser-native).</p>
           </div>
         </div>
       </section>
@@ -110,6 +124,24 @@ export default function Demo() {
               <li><strong>Verification:</strong> Platform CT support via Security framework</li>
             </ul>
           </div>
+
+          <div className={styles.platformCard}>
+            <h3>JVM Desktop</h3>
+            <ul>
+              <li><strong>HTTP Client:</strong> OkHttp with network interceptor</li>
+              <li><strong>SCT Source:</strong> Conscrypt TLS extension extraction</li>
+              <li><strong>Verification:</strong> Pure Kotlin crypto verification</li>
+            </ul>
+          </div>
+
+          <div className={styles.platformCard}>
+            <h3>Web (wasmJs)</h3>
+            <ul>
+              <li><strong>HTTP Client:</strong> Browser Fetch API</li>
+              <li><strong>CT Handling:</strong> Browser-native CT enforcement</li>
+              <li><strong>Mode:</strong> Audit mode (browsers handle CT natively)</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -121,6 +153,7 @@ export default function Demo() {
           <li>JDK 17+ and Android SDK</li>
           <li>Android Studio or IntelliJ IDEA</li>
           <li>For iOS: macOS with Xcode installed</li>
+          <li>For Web: Modern browser with WebAssembly support</li>
         </ul>
 
         <h3>Clone and Run</h3>

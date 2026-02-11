@@ -14,35 +14,16 @@ seal = "${LIBRARY_VERSION}"
 
 [libraries]
 seal-core = { module = "${MAVEN_ARTIFACTS.core}", version.ref = "seal" }
-seal-android = { module = "${MAVEN_ARTIFACTS.android}", version.ref = "seal" }
-seal-ios = { module = "${MAVEN_ARTIFACTS.ios}", version.ref = "seal" }
 seal-ktor = { module = "${MAVEN_ARTIFACTS.ktor}", version.ref = "seal" }`;
 
 export const gradleDependencies = `kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation("${getArtifactCoordinate('core')}")
+            // Only needed if using Ktor
             implementation("${getArtifactCoordinate('ktor')}")
         }
-        androidMain.dependencies {
-            implementation("${getArtifactCoordinate('android')}")
-        }
-        iosMain.dependencies {
-            implementation("${getArtifactCoordinate('ios')}")
-        }
     }
-}`;
-
-export const androidVersionCatalogConfig = `[versions]
-seal = "${LIBRARY_VERSION}"
-
-[libraries]
-seal-core = { module = "${MAVEN_ARTIFACTS.core}", version.ref = "seal" }
-seal-android = { module = "${MAVEN_ARTIFACTS.android}", version.ref = "seal" }`;
-
-export const androidGradleDependencies = `dependencies {
-    implementation("${getArtifactCoordinate('core')}")
-    implementation("${getArtifactCoordinate('android')}")
 }`;
 
 // ============================================================================
@@ -97,7 +78,7 @@ client.addInterceptor(certificateTransparencyInterceptor { })`;
 // KTOR EXAMPLES
 // ============================================================================
 
-export const ktorBasicExample = `val client = HttpClient(OkHttp) {  // or HttpClient(Darwin) on iOS
+export const ktorBasicExample = `val client = HttpClient {  // Works on Android, iOS, JVM Desktop, and Web
     install(CertificateTransparency) {
         // Include all hosts by default
     }
@@ -124,16 +105,17 @@ export const ktorDslExample = `val client = HttpClient(OkHttp) {
     }
 }`;
 
-export const ktorMultiplatformExample = `// commonMain - same code works on Android and iOS
+export const ktorMultiplatformExample = `// commonMain - same code works on all platforms
 val client = HttpClient {
     install(CertificateTransparency) {
         +"*.example.com"
     }
 }
 
-// The plugin automatically uses:
-// - OkHttp engine on Android (with Conscrypt for SCT extraction)
-// - Darwin engine on iOS (with SecTrust for CT verification)`;
+// The plugin automatically uses the appropriate engine:
+// - OkHttp engine on Android and JVM Desktop (with Conscrypt for SCT extraction)
+// - Darwin engine on iOS (with SecTrust for CT verification)
+// - On Web (wasmJs), CT is handled natively by the browser`;
 
 // ============================================================================
 // CUSTOM POLICIES EXAMPLES
@@ -150,55 +132,27 @@ certificateTransparencyInterceptor {
     policy = applePolicy
 }`;
 
-export const customPolicyCreationExample = `// Custom policy: require at least 2 valid SCTs from distinct operators
-class StrictOperatorDiversityPolicy : CTPolicy {
-    override fun evaluate(
-        certificateLifetimeDays: Long,
-        sctResults: List<SctVerificationResult>,
-    ): VerificationResult {
-        val validScts = sctResults.filterIsInstance<SctVerificationResult.Valid>()
-        
-        if (validScts.isEmpty()) {
-            return VerificationResult.Failure.NoScts
-        }
-        
-        val distinctOperators = validScts.mapNotNull { it.logOperator }.distinct()
-        
-        if (distinctOperators.size < 2) {
-            return VerificationResult.Failure.TooFewDistinctOperators(
-                found = distinctOperators.size,
-                required = 2,
-            )
-        }
-        
-        return VerificationResult.Success.Trusted(validScts)
-    }
-}
-
-// Lambda syntax (CTPolicy is a fun interface)
-val minimalPolicy = CTPolicy { _, sctResults ->
-    val valid = sctResults.filterIsInstance<SctVerificationResult.Valid>()
-    if (valid.isNotEmpty()) {
-        VerificationResult.Success.Trusted(valid)
-    } else {
+export const customPolicyCreationExample = `// Create a custom CT policy
+val myPolicy = CTPolicy { certificateLifetimeDays, sctResults ->
+    val validScts = sctResults.filterIsInstance<SctVerificationResult.Valid>()
+    
+    if (validScts.isEmpty()) {
         VerificationResult.Failure.NoScts
+    } else if (validScts.size < 2) {
+        VerificationResult.Failure.TooFewSctsTrusted(validScts.map { it.sct })
+    } else {
+        VerificationResult.Success.Trusted(validScts.map { it.sct })
     }
 }`;
 
-export const customPolicyUsageExample = `// Use your custom policy with OkHttp
-val client = OkHttpClient.Builder()
-    .addNetworkInterceptor(
-        certificateTransparencyInterceptor {
-            policy = StrictOperatorDiversityPolicy()
-        }
-    )
-    .build()
+export const customPolicyUsageExample = `// Use the custom policy with OkHttp
+certificateTransparencyInterceptor {
+    policy = myPolicy
+}
 
 // Or with Ktor
-val httpClient = HttpClient(OkHttp) {
-    install(CertificateTransparency) {
-        policy = StrictOperatorDiversityPolicy()
-    }
+install(CertificateTransparency) {
+    policy = myPolicy
 }`;
 
 // ============================================================================
@@ -256,8 +210,6 @@ export type CodeExampleKey = keyof typeof codeExamples;
 export const codeExamples = {
   versionCatalogConfig,
   gradleDependencies,
-  androidVersionCatalogConfig,
-  androidGradleDependencies,
   okhttpBasicExample,
   okhttpDslExample,
   okhttpNetworkInterceptorNote,

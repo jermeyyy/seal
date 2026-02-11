@@ -1,19 +1,17 @@
 # Seal — Project Overview
 
 ## Purpose
-Seal is a **Kotlin Multiplatform (KMP) Certificate Transparency (CT) verification library** for Android and iOS. It verifies Signed Certificate Timestamps (SCTs) to ensure TLS certificates have been publicly logged, protecting against misissued certificates.
+Seal is a **Kotlin Multiplatform (KMP) Certificate Transparency (CT) verification library** for Android, iOS, JVM Desktop, and Web (wasmJs). It verifies Signed Certificate Timestamps (SCTs) to ensure TLS certificates have been publicly logged, protecting against misissued certificates.
 
 ## Current State (as of 2026-02-10)
-The project is **fully implemented** — all 8 implementation phases are complete. All 4 library modules (`seal-core`, `seal-android`, `seal-ios`, `seal-ktor`) are implemented, tested (core has 12 test classes), and configured for Maven Central publishing. A full-featured demo app exists in `composeApp` + `androidApp`. A documentation website exists under `docs/site/`. Current version: **0.1.0** (initial release, 2026-02-08).
+The project is **fully implemented** — all 8 implementation phases are complete. Both library modules (`seal-core`, `seal-ktor`) are implemented, tested (core has 12 test classes), and configured for Maven Central publishing. A full-featured demo app exists in `composeApp` + `androidApp`. A documentation website exists under `docs/site/`. Current version: **0.1.0** (initial release, 2026-02-08).
 
 ## Architecture
 | Module | Type | Targets | Purpose |
 |--------|------|---------|---------|
-| `:seal-core` | KMP library | Android, iosArm64, iosSimulatorArm64 | Data models, ASN.1/SCT parsing, X.509 parsing, verification engine, CT policies, log list management |
-| `:seal-android` | Android library | Android | Conscrypt integration, OkHttp interceptor, TrustManager, OCSP parsing |
-| `:seal-ios` | KMP library | iOS | SecTrust evaluation, URLSession delegate helpers |
-| `:seal-ktor` | KMP library | Android, iOS | Ktor HttpClient plugin bridging platform implementations |
-| `:composeApp` | KMP app | Android, iOS | Demo application (MVI + Compose Multiplatform) |
+| `:seal-core` | KMP library | Android, iOS, JVM, wasmJs | Data models, ASN.1/SCT parsing, X.509 parsing, verification engine, CT policies, log list management, OkHttp interceptor, Conscrypt integration, SecTrust evaluation, URLSession helpers |
+| `:seal-ktor` | KMP library | Android, iOS, JVM, wasmJs | Ktor HttpClient plugin bridging platform implementations |
+| `:composeApp` | KMP app | Android, iOS, JVM Desktop, Web | Demo application (MVI + Compose Multiplatform) |
 | `:androidApp` | Android app | Android | Android host activity for demo app |
 
 ## Key Design Decisions
@@ -32,6 +30,8 @@ The project is **fully implemented** — all 8 implementation phases are complet
 - **AGP**: 9.0.0
 - **Android minSdk**: 24, compileSdk/targetSdk: 36
 - **iOS targets**: iosArm64, iosSimulatorArm64
+- **JVM Desktop**: JVM target via Conscrypt openjdk-uber
+- **Web**: wasmJs (browser-native CT; audit mode only)
 - **kotlinx-serialization-json**: 1.8.1
 - **kotlinx-datetime**: 0.7.1
 - **kotlinx-io**: 0.7.0

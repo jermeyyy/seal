@@ -35,6 +35,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":androidApp")
 include(":seal-core")
-include(":seal-android")
-include(":seal-ios")
 include(":seal-ktor")

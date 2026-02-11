@@ -1,6 +1,6 @@
 package com.jermey.seal.demo.data
 
-import com.jermey.seal.android.okhttp.installCertificateTransparency
+import com.jermey.seal.jvm.okhttp.installCertificateTransparency
 import com.jermey.seal.core.model.VerificationResult
 import com.jermey.seal.demo.CtCheckResult
 import com.jermey.seal.demo.Engine

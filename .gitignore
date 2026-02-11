@@ -18,8 +18,6 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 /seal-core/build
-/seal-android/build
-/seal-ios/build
 /seal-ktor/build
 docs/site/dist/
 docs/site/node_modules/

@@ -12,8 +12,7 @@
 
 # Build specific library module
 ./gradlew :seal-core:assemble
-./gradlew :seal-android:assembleDebug
-./gradlew :seal-ios:compileKotlinIosArm64
+./gradlew :seal-core:jvmJar
 ./gradlew :seal-ktor:assemble
 
 # Build iOS framework (for simulator)
@@ -35,8 +34,8 @@
 # Run seal-core iOS simulator tests
 ./gradlew :seal-core:iosSimulatorArm64Test
 
-# Run seal-android host tests (JVM-based)
-./gradlew :seal-android:allTests
+# Run seal-core JVM tests
+./gradlew :seal-core:jvmTest
 
 # Run composeApp common tests
 ./gradlew :composeApp:allTests

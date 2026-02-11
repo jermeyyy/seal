@@ -12,7 +12,7 @@ export default function OkHttp() {
     <article className={styles.guides}>
       <h1>OkHttp Integration</h1>
       <p className={styles.intro}>
-        Add Certificate Transparency verification to your Android app using OkHttp's 
+        Add Certificate Transparency verification to your Android or JVM Desktop app using OkHttp's 
         network interceptor mechanism. This guide covers setup, configuration, 
         and best practices.
       </p>
@@ -20,7 +20,7 @@ export default function OkHttp() {
       <section>
         <h2 id="basic-setup">Basic Setup</h2>
         <p>
-          Add the <code>seal-android</code> dependency and create an OkHttp client with 
+          Add the <code>seal-core</code> dependency and create an OkHttp client with 
           the CT interceptor:
         </p>
         <CodeBlock code={okhttpBasicExample} language="kotlin" title="Basic OkHttp Setup" />

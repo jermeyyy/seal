@@ -12,7 +12,5 @@ plugins {
 
 dependencies {
     dokka(project(":seal-core"))
-    dokka(project(":seal-android"))
-    dokka(project(":seal-ios"))
     dokka(project(":seal-ktor"))
 }

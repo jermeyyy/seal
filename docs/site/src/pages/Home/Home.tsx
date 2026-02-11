@@ -19,8 +19,18 @@ export default function Home() {
         </p>
         
         <div className={styles.badges}>
-          <img src="https://img.shields.io/badge/-android-6EDB8D.svg?style=flat&logo=android" alt="Android" />
-          <img src="https://img.shields.io/badge/-ios-CDCDCD.svg?style=flat&logo=apple" alt="iOS" />
+          <a href="https://central.sonatype.com/search?q=io.github.jermeyyy" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/maven-central/v/io.github.jermeyyy/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" />
+          </a>
+          <a href="https://kotlinlang.org" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" />
+          </a>
+          <a href="https://www.jetbrains.com/kotlin-multiplatform/" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20JVM%20Desktop%20%7C%20Web-4285F4?logo=kotlin&logoColor=white" alt="Platforms" />
+          </a>
+          <a href="https://github.com/jermeyyy/seal/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+          </a>
         </div>
         
         <div className={styles.heroButtons}>
@@ -35,8 +45,8 @@ export default function Home() {
         <p>
           <strong>Seal</strong> is a Certificate Transparency (CT) verification library for 
           Kotlin Multiplatform. It enforces CT compliance on HTTPS connections, ensuring that 
-          TLS certificates are logged in public transparency logs. Seal supports Android and iOS, 
-          with integrations for both OkHttp and Ktor HTTP clients.
+          TLS certificates are logged in public transparency logs. Seal supports Android, iOS, 
+          JVM Desktop, and Web (wasmJs), with integrations for both OkHttp and Ktor HTTP clients.
         </p>
       </section>
 
@@ -57,20 +67,20 @@ export default function Home() {
 
           <div className={styles.featureCard}>
             <h4>Kotlin Multiplatform</h4>
-            <p>One library for Android and iOS. Write your CT configuration once in shared 
-            code and it works on both platforms automatically.</p>
+            <p>One library for Android, iOS, JVM Desktop, and Web. Write your CT configuration once in shared 
+            code and it works on all platforms automatically.</p>
           </div>
 
           <div className={styles.featureCard}>
             <h4>OkHttp Integration</h4>
             <p>Drop-in network interceptor for OkHttp. Add CT verification to your existing 
-            Android networking stack with a single line of code.</p>
+            Android or JVM Desktop networking stack with a single line of code.</p>
           </div>
 
           <div className={styles.featureCard}>
             <h4>Ktor Plugin</h4>
-            <p>Native Ktor plugin for multiplatform HTTP clients. Works with both OkHttp 
-            engine on Android and Darwin engine on iOS.</p>
+            <p>Native Ktor plugin for multiplatform HTTP clients. Works with OkHttp 
+            engine on Android and JVM Desktop, Darwin engine on iOS, and browser-native CT on Web.</p>
           </div>
 
           <div className={styles.featureCard}>
@@ -98,7 +108,7 @@ export default function Home() {
         <div className={styles.callout}>
           <div>
             <strong>Tip:</strong> Use <code>seal-ktor</code> for multiplatform projects — it provides 
-            a unified API that works on both Android and iOS.
+            a unified API that works on Android, iOS, JVM Desktop, and Web.
           </div>
         </div>
       </section>
@@ -112,7 +122,7 @@ export default function Home() {
         
         <div className={styles.steps}>
           <div className={styles.step}>
-            <h3>Option 1: OkHttp (Android)</h3>
+            <h3>Option 1: OkHttp (Android / JVM Desktop)</h3>
             <p>Add a network interceptor to your OkHttp client:</p>
             <CodeBlock code={okhttpBasicExample} language="kotlin" title="OkHttp Setup" />
           </div>

@@ -617,7 +617,7 @@ export default function WhyCT() {
           </li>
           <li>
             <strong>A Ktor client plugin</strong> for Kotlin Multiplatform projects that adds CT
-            verification across Android and iOS.
+            verification across Android, iOS, JVM Desktop, and Web.
           </li>
           <li>
             <strong>Configurable verification policies</strong> — choose how many <code>SCT</code>s

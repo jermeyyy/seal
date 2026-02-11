@@ -21,8 +21,21 @@ kotlin {
         }
     }
 
+    jvm {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+    }
+
     iosArm64()
     iosSimulatorArm64()
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         commonMain.dependencies {
@@ -35,12 +48,43 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
         }
+
+        // jvmSharedMain: shared between androidMain and jvmMain (Conscrypt, OkHttp, TrustManager)
+        val jvmSharedMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.okhttp)
+            }
+        }
+        val jvmSharedTest by creating {
+            dependsOn(commonTest.get())
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlin.testJunit)
+                implementation(libs.okhttp.mockwebserver)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
+
+        androidMain.get().dependsOn(jvmSharedMain)
+        androidMain.dependencies {
+            implementation(libs.conscrypt.android)
+        }
+
+        jvmMain.get().dependsOn(jvmSharedMain)
+        jvmMain.dependencies {
+            implementation(libs.conscrypt.openjdk)
+        }
+
+        val jvmTest by getting {
+            dependsOn(jvmSharedTest)
+        }
     }
 }
 
 dokka {
     moduleName.set("Seal - Core")
-    moduleVersion.set("0.1.0")
+    moduleVersion.set("0.2.0")
 
     dokkaPublications.html {
         outputDirectory.set(layout.buildDirectory.dir("dokka/html"))

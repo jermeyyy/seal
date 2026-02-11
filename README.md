@@ -12,13 +12,13 @@
   <a href="https://jermeyyy.github.io/seal/"><img src="https://img.shields.io/badge/Docs-jermeyyy.github.io%2Fseal-blue?logo=gitbook&logoColor=white" alt="Documentation" /></a>
   <a href="https://central.sonatype.com/search?q=io.github.jermeyyy"><img src="https://img.shields.io/maven-central/v/io.github.jermeyyy/seal-core?label=Maven%20Central&logo=apache-maven&color=blue" alt="Maven Central" /></a>
   <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Kotlin-2.3.0-7f52ff?logo=kotlin&logoColor=white" alt="Kotlin" /></a>
-  <a href="https://www.jetbrains.com/kotlin-multiplatform/"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-4285F4?logo=android&logoColor=white" alt="Platforms" /></a>
+  <a href="https://www.jetbrains.com/kotlin-multiplatform/"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20JVM%20Desktop%20%7C%20Web-4285F4?logo=kotlin&logoColor=white" alt="Platforms" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
 </p>
 
 ---
 
-Seal is a **Kotlin Multiplatform** library that brings [Certificate Transparency](https://certificate.transparency.dev/) (CT) verification to **Android** and **iOS** applications.
+Seal is a **Kotlin Multiplatform** library that brings [Certificate Transparency](https://certificate.transparency.dev/) (CT) verification to **Android**, **iOS**, **JVM Desktop**, and **Web (wasmJs)** applications.
 It verifies Signed Certificate Timestamps (SCTs) to ensure TLS certificates have been publicly logged, protecting users against misissued or rogue certificates.
 
 ## What is Certificate Transparency?
@@ -33,14 +33,16 @@ Seal verifies these SCTs during HTTPS connections to ensure that:
 3. The SCT signatures are valid and from trusted logs.
 
 Without CT enforcement, a compromised or rogue CA can issue certificates that silently intercept traffic.
-Seal closes this gap at the application layer for both Android and iOS.
+Seal closes this gap at the application layer.
 
 ## Features
 
 - **Cross-platform** — shared verification logic in pure Kotlin with platform-native crypto
+- **4 targets** — Android, iOS, JVM Desktop, and Web (wasmJs)
 - **All 3 SCT delivery methods** — X.509 embedded extensions, TLS extensions, and OCSP stapling
-- **OkHttp interceptor** — drop-in network interceptor for Android
-- **Ktor plugin** — multiplatform `HttpClient` plugin for Android (OkHttp) and iOS (Darwin)
+- **OkHttp interceptor** — drop-in network interceptor for Android and JVM Desktop
+- **Ktor plugin** — multiplatform `HttpClient` plugin for all platforms
+- **TrustManager wrapper** — `CTTrustManager` for Android and JVM Desktop
 - **Configurable policies** — built-in Chrome and Apple presets, or define your own
 - **Fail-open by default** — connections are never blocked unless you opt in
 - **Bundled log list** — ships with an embedded CT log list so verification works offline on first launch
@@ -51,51 +53,43 @@ Seal closes this gap at the application layer for both Android and iOS.
 
 ```mermaid
 graph TD
-    composeApp[":composeApp<br>(Demo / Test App)"]
-    android[":seal-android<br>OkHttp · Conscrypt"]
-    ktor[":seal-ktor<br>Plugin"]
-    ios[":seal-ios<br>SecTrust · URLSession"]
-    core[":seal-core<br>Models · ASN.1<br>SCT Parser · Policy Engine"]
+    composeApp[":composeApp<br>(Demo App)<br>Android · iOS · Desktop · Web"]
+    ktor[":seal-ktor<br>Ktor Plugin<br>Android · iOS · JVM · wasmJs"]
+    core[":seal-core<br>Models · ASN.1 · SCT Parser<br>Policy Engine · Platform Integrations<br>Android · iOS · JVM · wasmJs"]
 
-    composeApp --> android
     composeApp --> ktor
-    composeApp --> ios
-    android --> core
+    composeApp --> core
     ktor --> core
-    ios --> core
 ```
 
 | Module | Type | Targets | Purpose |
 |--------|------|---------|---------|
-| `seal-core` | KMP library | Android, iOS | Data models, ASN.1/SCT parsing, verification engine, CT policies |
-| `seal-android` | Android library | Android | Conscrypt integration, OkHttp interceptor, TrustManager wrapper |
-| `seal-ios` | KMP library | iOS | SecTrust evaluation, URLSession delegate helpers |
-| `seal-ktor` | KMP library | Android, iOS | Ktor `HttpClient` plugin bridging platform implementations |
+| `seal-core` | KMP library | Android, iOS, JVM, wasmJs | Data models, ASN.1/SCT parsing, verification engine, CT policies, platform integrations (OkHttp, Conscrypt, SecTrust, URLSession) |
+| `seal-ktor` | KMP library | Android, iOS, JVM, wasmJs | Ktor `HttpClient` plugin bridging platform implementations |
 
 ### Which module do I need?
 
 | Use case | Module(s) |
 |----------|-----------|
-| Android app with OkHttp | `seal-core` + `seal-android` |
-| iOS app with URLSession | `seal-core` + `seal-ios` |
-| KMP app with Ktor | `seal-core` + `seal-ktor` |
-| KMP app targeting both platforms with Ktor | `seal-core` + `seal-ktor` (platform engines resolved automatically) |
+| Android app with OkHttp | `seal-core` |
+| iOS app with URLSession | `seal-core` |
+| JVM Desktop app with OkHttp | `seal-core` |
+| Any platform with Ktor | `seal-core` + `seal-ktor` |
+| Web (wasmJs) | `seal-core` (browser handles CT natively) |
 
 ## Installation
 
 ### Version Catalog
 
-Add the Seal BOM/versions to your `libs.versions.toml`:
+Add the Seal versions to your `libs.versions.toml`:
 
 ```toml
 [versions]
 seal = "<version>"
 
 [libraries]
-seal-core     = { module = "io.github.jermeyyy:seal-core", version.ref = "seal" }
-seal-android  = { module = "io.github.jermeyyy:seal-android", version.ref = "seal" }
-seal-ios      = { module = "io.github.jermeyyy:seal-ios", version.ref = "seal" }
-seal-ktor     = { module = "io.github.jermeyyy:seal-ktor", version.ref = "seal" }
+seal-core = { module = "io.github.jermeyyy:seal-core", version.ref = "seal" }
+seal-ktor = { module = "io.github.jermeyyy:seal-ktor", version.ref = "seal" }
 ```
 
 ### Gradle Dependencies
@@ -103,22 +97,12 @@ seal-ktor     = { module = "io.github.jermeyyy:seal-ktor", version.ref = "seal" 
 ```kotlin
 // build.gradle.kts
 
-// Core (always required)
+// Core — includes all platform integrations
 commonMain.dependencies {
     implementation(libs.seal.core)
 }
 
-// Android — OkHttp interceptor
-androidMain.dependencies {
-    implementation(libs.seal.android)
-}
-
-// iOS — SecTrust / URLSession helpers
-iosMain.dependencies {
-    implementation(libs.seal.ios)
-}
-
-// Ktor plugin (multiplatform — works on both Android and iOS)
+// Ktor plugin (optional — multiplatform)
 commonMain.dependencies {
     implementation(libs.seal.ktor)
 }
@@ -128,15 +112,13 @@ Or with raw coordinates:
 
 ```kotlin
 implementation("io.github.jermeyyy:seal-core:<version>")
-implementation("io.github.jermeyyy:seal-android:<version>")   // Android only
-implementation("io.github.jermeyyy:seal-ios:<version>")       // iOS only
-implementation("io.github.jermeyyy:seal-ktor:<version>")      // Multiplatform
+implementation("io.github.jermeyyy:seal-ktor:<version>")   // Optional - Ktor plugin
 ```
 
-## Quick Start — OkHttp
+## Quick Start — OkHttp (Android & JVM Desktop)
 
 ```kotlin
-import com.jermey.seal.android.okhttp.certificateTransparencyInterceptor
+import com.jermey.seal.jvm.okhttp.certificateTransparencyInterceptor
 
 val client = OkHttpClient.Builder()
     .addNetworkInterceptor(
@@ -154,7 +136,7 @@ val client = OkHttpClient.Builder()
 ```kotlin
 import com.jermey.seal.ktor.CertificateTransparency
 
-// Android (OkHttp engine)
+// Android / JVM Desktop (OkHttp engine)
 val client = HttpClient(OkHttp) {
     install(CertificateTransparency) {
         +"*.example.com"
@@ -171,9 +153,14 @@ val client = HttpClient(Darwin) {
         failOnError = false
     }
 }
+
+// Web (Js engine) — browser handles CT natively
+val client = HttpClient(Js) {
+    install(CertificateTransparency)
+}
 ```
 
-The Ktor plugin uses the same configuration DSL on both platforms. The underlying implementation delegates to `seal-android` (OkHttp engine) or `seal-ios` (Darwin engine) automatically.
+The Ktor plugin uses the same configuration DSL on all platforms. The underlying implementation delegates to the appropriate platform engine automatically.
 
 For full guide, see [Ktor Integration](https://jermeyyy.github.io/seal/guides/ktor).
 
@@ -181,35 +168,53 @@ For full guide, see [Ktor Integration](https://jermeyyy.github.io/seal/guides/kt
 
 The OkHttp integration provides a `CertificateTransparencyInterceptor` that verifies SCTs on every HTTPS request.
 It supports all three SCT delivery methods: X.509 embedded, TLS extension, and OCSP stapling.
+This works on both **Android** and **JVM Desktop**.
 
 ```kotlin
+import com.jermey.seal.jvm.okhttp.certificateTransparencyInterceptor
+import com.jermey.seal.jvm.okhttp.installCertificateTransparency
+
 val client = OkHttpClient.Builder()
-    .addNetworkInterceptor(
-        certificateTransparencyInterceptor {
-            +"*.example.com"
-            -"internal.example.com"
-            policy = ChromeCtPolicy()
-            failOnError = true
-            logger = { host, result ->
-                Log.d("CT", "$host: $result")
-            }
+    .installCertificateTransparency {
+        +"*.example.com"
+        -"internal.example.com"
+        policy = ChromeCtPolicy()
+        failOnError = true
+        logger = { host, result ->
+            println("CT: $host: $result")
         }
-    )
+    }
     .build()
 ```
 
 **Conscrypt** is required for TLS extension and OCSP SCT access. Initialize it early:
 
 ```kotlin
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        ConscryptInitializer.initialize()
-    }
-}
+import com.jermey.seal.jvm.ConscryptInitializer
+
+// Android: in Application.onCreate()
+// JVM Desktop: at program start
+ConscryptInitializer.initialize()
 ```
 
 For full guide, see [OkHttp Integration](https://jermeyyy.github.io/seal/guides/okhttp).
+
+## TrustManager Integration (Android & JVM Desktop)
+
+For apps that need CT verification at the TLS level (instead of the OkHttp interceptor level):
+
+```kotlin
+import com.jermey.seal.jvm.trust.CTTrustManagerFactory
+
+val ctTrustManager = CTTrustManagerFactory.create {
+    +"*.example.com"
+    failOnError = true
+}
+
+// Use with SSLContext, OkHttp, or any TLS library
+val sslContext = SSLContext.getInstance("TLS")
+sslContext.init(null, arrayOf(ctTrustManager), null)
+```
 
 ## Configuration Reference
 
@@ -309,6 +314,8 @@ For more details, see [Configuration](https://jermeyyy.github.io/seal/guides/con
 `IosCertificateTransparencyVerifier` combines manual embedded-SCT verification with OS-level TLS/OCSP CT checking:
 
 ```kotlin
+import com.jermey.seal.ios.IosCertificateTransparencyVerifier
+
 val configuration = ctConfiguration {
     failOnError = true
 }
@@ -321,6 +328,8 @@ val result = verifier.verify(secTrust, host)
 `UrlSessionCtHelper` wraps CT verification for use in a `URLSessionDelegate`:
 
 ```kotlin
+import com.jermey.seal.ios.urlsession.UrlSessionCtHelper
+
 val helper = UrlSessionCtHelper(configuration, verifier)
 
 // In your URLSessionDelegate:
@@ -380,17 +389,40 @@ sealed class VerificationResult {
 | **Embedded SCTs** | Verified manually by Seal against its bundled log list |
 | **TLS / OCSP SCTs** | Delegated to OS via `SecTrustCopyResult` CT compliance flag |
 
+### JVM Desktop
+
+| | |
+|---|---|
+| **JVM Target** | 11+ |
+| **SCT Methods** | Embedded, TLS extension, OCSP stapling (all three) |
+| **Conscrypt** | Required (bundled via `conscrypt-openjdk-uber`) |
+| **Disk Cache** | `JvmDiskLogListCache` — defaults to `~/.seal/cache` |
+
+### Web (wasmJs)
+
+| | |
+|---|---|
+| **Runtime** | Modern browsers with WebAssembly support |
+| **CT Verification** | Handled natively by the browser — Seal provides audit-mode reporting |
+| **Note** | Browsers enforce their own CT policies; Seal's verification is informational only |
+
 ## API Documentation
 
 Full KDoc API documentation is available at: **[jermeyyy.github.io/seal/api/](https://jermeyyy.github.io/seal/api/)**
 
 ## Demo App
 
-The repository includes a Compose Multiplatform demo app that demonstrates OkHttp and Ktor CT verification.
+The repository includes a Compose Multiplatform demo app targeting Android, iOS, JVM Desktop, and Web.
 
 ```shell
 # Android
 ./gradlew :composeApp:assembleDebug
+
+# JVM Desktop
+./gradlew :composeApp:run
+
+# Web (wasmJs)
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
 
 # iOS — open in Xcode
 open iosApp/iosApp.xcodeproj
@@ -417,10 +449,12 @@ If you set `failOnError = true`, a `SSLPeerUnverifiedException` is thrown and th
 </details>
 
 <details>
-<summary><strong>Do I need Conscrypt on Android?</strong></summary>
+<summary><strong>Do I need Conscrypt?</strong></summary>
 
-Conscrypt is required to access TLS extension and OCSP-stapled SCTs. Without it, only embedded X.509 SCTs are verified.
-Call `ConscryptInitializer.initialize()` as early as possible (typically in `Application.onCreate()`).
+On **Android** and **JVM Desktop**, Conscrypt is required to access TLS extension and OCSP-stapled SCTs. Without it, only embedded X.509 SCTs are verified.
+Call `ConscryptInitializer.initialize()` as early as possible.
+
+On **iOS** and **Web**, Conscrypt is not used.
 
 </details>
 
@@ -440,6 +474,14 @@ pinning restricts which certificates are accepted. They are complementary techni
 
 </details>
 
+<details>
+<summary><strong>Does the web target actually verify CT?</strong></summary>
+
+No. In browsers, Certificate Transparency is enforced natively by the browser engine.
+The wasmJs target provides the same API surface for code sharing but does not perform additional CT verification — the browser already handles it.
+
+</details>
+
 ## Building
 
 ```shell
@@ -451,6 +493,12 @@ pinning restricts which certificates are accepted. They are complementary techni
 
 # Build the demo app (Android)
 ./gradlew :composeApp:assembleDebug
+
+# Run the demo app (Desktop)
+./gradlew :composeApp:run
+
+# Run the demo app (Web)
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
 
 # Generate API documentation
 ./gradlew dokkaGenerateModuleHtml
